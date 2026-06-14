@@ -10,7 +10,7 @@ interface ProspectListProps {
 }
 
 export function ProspectList({ onProspectClick }: ProspectListProps) {
-  const { prospects } = useAppStore()
+  const { prospects, tours } = useAppStore()
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mx-6 my-4">
@@ -30,6 +30,7 @@ export function ProspectList({ onProspectClick }: ProspectListProps) {
           <tbody className="divide-y divide-gray-100">
             {prospects.map((prospect) => {
               const channelConfig = CHANNEL_CONFIG[prospect.canal]
+              const tour = tours.find(t => t.id === prospect.tour_interes_id)
               
               return (
                 <tr key={prospect.id} className="hover:bg-gray-50/50 transition-colors">
@@ -58,9 +59,9 @@ export function ProspectList({ onProspectClick }: ProspectListProps) {
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-gray-700 max-w-[200px] truncate">
-                      {prospect.tour_interes?.nombre || 'General'}
+                      {tour?.nombre || 'General'}
                     </div>
-                    <div className="text-xs text-gray-500 mt-0.5">{prospect.numero_personas} pax</div>
+                    <div className="text-xs text-gray-500 mt-0.5">{prospect.num_personas} pax</div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1.5 text-sm" style={{ color: channelConfig.color }}>

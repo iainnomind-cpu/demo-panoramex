@@ -24,8 +24,8 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
   if (!prospect) return null
 
   const channelConfig = CHANNEL_CONFIG[prospect.canal]
-  const tour = prospect.tour_interes
-  const agent = agents.find(a => a.id === prospect.agente_asignado)
+  const tour = tours.find(t => t.id === prospect.tour_interes_id)
+  const agent = agents.find(a => a.id === prospect.agente_id)
 
   // Find latest messages or activity
   const conversation = conversations.find(c => c.prospect_id === prospectId)
@@ -67,7 +67,7 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
                 <p className="text-xs text-on-surface-variant mb-1">Pasajeros</p>
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-gray-400 text-lg">group</span>
-                  <span className="text-sm">{prospect.numero_personas} Personas</span>
+                  <span className="text-sm">{prospect.num_personas} Personas</span>
                 </div>
               </div>
 
