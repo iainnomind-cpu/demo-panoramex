@@ -1,73 +1,97 @@
-# React + TypeScript + Vite
+# Panoramex CRM - Sistema Modular de Gestión
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Un ecosistema de software modular diseñado para **Panoramex**, una operadora turística. Este sistema gestiona prospectos, tours, reservaciones, campañas y ofrece analíticas detalladas.
 
-Currently, two official plugins are available:
+## 🚀 Tech Stack (Pila Tecnológica)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+El proyecto está construido con herramientas modernas de desarrollo web para garantizar rendimiento, escalabilidad y una experiencia de usuario premium:
 
-## React Compiler
+- **Framework:** [React 18](https://react.dev/)
+- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool:** [Vite](https://vitejs.dev/) (Rápido HMR y empaquetado optimizado)
+- **Estilos:** [Tailwind CSS](https://tailwindcss.com/) (Utility-first CSS framework)
+- **Manejo de Estado:** [Zustand](https://zustand-demo.pmnd.rs/) (Gestión de estado global ligero y rápido)
+- **Enrutamiento:** [React Router v6](https://reactrouter.com/) (Navegación del lado del cliente)
+- **Gráficos:** [Recharts](https://recharts.org/) (Gráficos interactivos en Analytics y Dashboard)
+- **Utilidades:** `date-fns` (Para el formato y manejo de fechas)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🧩 Estructura de Módulos (Arquitectura)
 
-## Expanding the ESLint configuration
+El sistema está dividido en 6 módulos principales interconectados:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Chat (Conversaciones)
+- Interfaz para atender mensajes entrantes (simulando WhatsApp Business API).
+- Vista de perfil del cliente, notas rápidas y transferencia entre agentes.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 2. CRM Central (Prospectos)
+- **Vista Kanban:** Tablero drag-and-drop (simulado) para visualizar prospectos por etapas (Nuevo, Calificado, En Proceso, Reservado, Convertido).
+- **Vista de Lista:** Tabla detallada de prospectos.
+- **Vista 360:** Modal interactivo con el perfil completo del cliente, línea de tiempo de interacción y acciones rápidas (llamar, correo, chatear, reservar).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 3. Catálogo de Tours
+- Visualización de la oferta turística (Ej: Tren José Cuervo, Lago de Chapala, etc.).
+- Filtros por categoría (Cultural, Pueblos Mágicos, etc.).
+- Botones de acción directa para "Ver Detalles" o "Reservar".
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 4. Reservaciones
+- Gestión de las ventas y reservas consolidadas.
+- Seguimiento de pagos y estado de confirmación.
+
+### 5. Campañas (Marketing)
+- Monitoreo del rendimiento de campañas publicitarias (Meta Ads, Google Ads).
+- Métricas de ROAS, costo por lead (CPL) y alcance.
+
+### 6. Analytics & Dashboard
+- **Dashboard Ejecutivo:** Resumen principal con KPIs rápidos (Leads Hoy, Conversión, etc.), embudo de ventas y prospectos recientes.
+- **Analytics Detallado:** Gráficas de rendimiento de agentes, tours más vendidos e historiales de conversión.
+
+## 📂 Estructura de Carpetas
+
+```text
+src/
+├── assets/           # Imágenes, íconos (Ej: hero.png, etc.)
+├── components/       # Componentes reusables de UI
+│   ├── layout/       # Sidebar, TopBar, Layout principal
+│   ├── shared/       # Componentes compartidos (ProspectCard, Prospect360Modal)
+│   └── ui/           # Componentes base (Button, Badge, Modal, Input, Toast)
+├── data/             # Mocks de datos simulados (agentes, campañas, prospectos, etc.)
+├── hooks/            # Custom React hooks (useToast, etc.)
+├── pages/            # Vistas/Páginas principales (Cada módulo tiene su carpeta)
+│   ├── Analytics/    
+│   ├── Campaigns/    
+│   ├── Conversations/
+│   ├── Dashboard/    
+│   ├── Prospects/    
+│   ├── Reservations/ 
+│   └── Tours/        
+├── router/           # Configuración de React Router
+├── store/            # Store global de Zustand (useAppStore.ts)
+├── types/            # Definiciones de interfaces y tipos de TypeScript
+├── App.tsx           # Componente raíz
+└── main.tsx          # Punto de entrada de la aplicación
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Instalación y Desarrollo Local
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Instalar dependencias:
+   ```bash
+   npm install
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2. Ejecutar el servidor de desarrollo local (Vite):
+   ```bash
+   npm run dev
+   ```
+
+3. Compilar para producción (Build):
+   ```bash
+   npm run build
+   ```
+
+## 🌐 Despliegue en Vercel
+
+El proyecto está configurado y listo para ser desplegado en [Vercel](https://vercel.com).
+Asegúrate de que la configuración de Vercel apunte a:
+- **Framework Preset:** Vite
+- **Build Command:** `npm run build`
+- **Output Directory:** `dist`
