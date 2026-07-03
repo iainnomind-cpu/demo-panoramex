@@ -1,6 +1,7 @@
 import React from 'react'
 import { Prospect, ProspectStatus, STATUS_CONFIG } from '../../types'
 import { ProspectCard } from '../../components/shared/ProspectCard'
+import { useUpdateProspectStatus } from '../../hooks/useProspects'
 
 interface KanbanColumnProps {
   status: ProspectStatus
@@ -10,11 +11,26 @@ interface KanbanColumnProps {
 
 export const KanbanColumn: React.FC<KanbanColumnProps> = ({ status, prospects, onProspectClick }) => {
   const statusConfig = STATUS_CONFIG[status]
+  const updateStatus = useUpdateProspectStatus()
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault() // Required to allow dropping
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    const prospectId = e.dataTransfer.getData('prospect_id')
+    if (prospectId) {
+      updateStatus.mutate({ prospect_id: prospectId, new_status: status })
+    }
+  }
 
   return (
     <div 
       className="flex flex-col min-w-[320px] max-w-[320px] max-h-full rounded-xl overflow-hidden shadow-sm border border-gray-200"
       style={{ backgroundColor: statusConfig.bg }}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
     >
       {/* Header */}
       <div className="p-4 flex items-center justify-between border-b border-white/40 shadow-sm" style={{ backgroundColor: `${statusConfig.border}15` }}>

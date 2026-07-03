@@ -1,11 +1,9 @@
 import { create } from 'zustand'
+import { supabase } from '../lib/supabase'
 import {
   agents,
-  tours,
   prospects,
   conversations,
-  reservations,
-  campaigns,
   dashboardStats,
 } from '../data'
 import type {
@@ -33,22 +31,23 @@ interface AppState {
   updateProspectStatus: (id: string, newStatus: ProspectStatus) => void
   addMessageToConversation: (conversationId: string, message: Message) => void
   createReservation: (reservation: Reservation) => void
+  loadTours: () => Promise<void>
+  updateVariantPrice: (variantId: string, newPrice: number) => void
 }
 
-export const useAppStore = create<AppState>((set) => ({
+export const useAppStore = create<AppState>((set, get) => ({
   agents,
-  tours,
+  tours: [],
   prospects,
   conversations,
-  reservations,
-  campaigns,
+  reservations: [],
   dashboardStats,
   currentAgent: agents.find((a) => a.id === 'a1') || null,
 
   updateProspectStatus: (id, newStatus) =>
     set((state) => ({
       prospects: state.prospects.map((p) =>
-        p.id === id ? { ...p, estado: newStatus } : p
+        p.id === id ? { ...p, status: newStatus } : p
       ),
     })),
 
@@ -72,5 +71,26 @@ export const useAppStore = create<AppState>((set) => ({
         ...state.dashboardStats,
         reservas_activas: state.dashboardStats.reservas_activas + 1,
       },
+    })),
+
+  loadTours: async () => {
+    const { data, error } = await supabase
+      .from('tours')
+      .select('*, tour_variants(*)')
+      .order('created_at', { ascending: true })
+    
+    if (!error && data) {
+      set({ tours: data as unknown as Tour[] })
+    }
+  },
+
+  updateVariantPrice: (variantId, newPrice) =>
+    set((state) => ({
+      tours: state.tours.map((t) => ({
+        ...t,
+        tour_variants: t.tour_variants?.map((v) =>
+          v.id === variantId ? { ...v, price_per_person: newPrice } : v
+        ),
+      })),
     })),
 }))

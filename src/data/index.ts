@@ -4,11 +4,8 @@
 // ============================================================
 
 export { agents } from './agents'
-export { tours } from './tours'
 export { prospects } from './prospects'
 export { conversations } from './conversations'
-export { reservations } from './reservations'
-export { campaigns } from './campaigns'
 
 // ── Dashboard Stats ─────────────────────────────────────────
 export const dashboardStats = {

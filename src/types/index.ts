@@ -1,6 +1,7 @@
 // ============================================================
 // PANORAMEX CRM — TypeScript Types & Interfaces
 // ============================================================
+import { Database } from '@/lib/database.types'
 
 export type ProspectStatus =
   | 'nuevo'
@@ -21,57 +22,25 @@ export type TourCategory =
   | 'privado'
   | 'gastronomia'
 
-export interface Agent {
-  id: string
-  nombre: string
-  apellido: string
-  iniciales: string
-  rol: 'asesor' | 'directivo'
-  email: string
+export type Agent = Database['public']['Tables']['agents']['Row'] & {
+  // Add UI-specific fields not in DB if needed
   avatar?: string
-  prospectos_activos: number
-  color: string // para avatar placeholder
+  prospectos_activos?: number
+  color?: string
 }
 
-export interface Tour {
-  id: string
-  nombre: string
-  categoria: TourCategory
-  descripcion: string
-  ubicacion: string
-  precio_base: number
-  precio_premium?: number
-  precio_diamante?: number
-  duracion_horas: number
-  capacidad_max: number
-  capacidad_min: number
-  dias_disponibles: string[]
-  horario_salida: string
-  horario_regreso: string
-  incluye: string[]
-  imagen: string
-  activo: boolean
-  destacado: boolean
+export type Tour = Database['public']['Tables']['tours']['Row'] & {
+  category?: string // To support the UI category filter
+  tour_variants?: TourVariant[]
 }
 
-export interface Prospect {
-  id: string
-  nombre: string
-  apellido: string
-  telefono: string
-  email?: string
-  canal: Channel
-  tour_interes_id: string
-  fecha_deseada?: string
-  num_personas: number
-  estado: ProspectStatus
-  agente_id?: string
-  notas?: string
-  created_at: string
-  ultima_actividad: string
-  campana_origen?: string
-  etiquetas: string[]
+export type TourVariant = Database['public']['Tables']['tour_variants']['Row']
+
+export type Prospect = Database['public']['Tables']['prospects']['Row'] & {
+  birth_date?: string | null
 }
+
+export type InteractionTimeline = Database['public']['Tables']['interactions_timeline']['Row']
 
 export interface Message {
   id: string
@@ -91,39 +60,42 @@ export interface Conversation {
   no_leidos: number
 }
 
-export interface Reservation {
-  id: string
-  prospect_id: string
-  tour_id: string
-  fecha_tour: string
-  num_personas: number
-  agente_id: string
-  monto_total: number
-  deposito_pagado: number
-  metodo_pago?: string
-  estado: 'pendiente' | 'confirmada' | 'completada' | 'cancelada'
-  notas?: string
-  created_at: string
+export type Reservation = Database['public']['Tables']['reservations']['Row'] & {
+  reservation_passengers?: ReservationPassenger[]
+  tour_variants?: TourVariant
+  prospects?: Prospect
 }
+
+export type ReservationPassenger = Database['public']['Tables']['reservation_passengers']['Row']
 
 export interface Campaign {
   id: string
-  nombre: string
-  estado: 'borrador' | 'programada' | 'activa' | 'completada'
-  segmento: {
-    tour_ids?: string[]
-    estados?: ProspectStatus[]
-    canales?: Channel[]
-    dias_sin_actividad?: number
-  }
-  mensaje_template: string
-  fecha_envio?: string
-  metricas: {
-    enviados: number
-    leidos: number
-    respondidos: number
-    conversiones: number
-  }
+  name: string
+  type: 'batch' | 'automated_birthday' | 'automated_survey'
+  template_name: string
+  status: 'draft' | 'running' | 'completed' | 'paused'
+  target_filters: Record<string, any> | null
+  created_at: string
+  created_by: string
+}
+
+export interface CampaignSend {
+  id: string
+  campaign_id: string
+  prospect_id: string | null
+  phone_number: string
+  status: 'queued' | 'sent' | 'delivered' | 'read' | 'failed' | 'replied'
+  meta_message_id: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface SatisfactionSurvey {
+  id: string
+  reservation_id: string
+  prospect_id: string
+  rating: number
+  feedback: string | null
   created_at: string
 }
 

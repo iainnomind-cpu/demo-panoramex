@@ -12,13 +12,13 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
   const navigate = useNavigate()
   const { agents, tours } = useAppStore()
 
-  const statusConfig = STATUS_CONFIG[prospect.estado]
-  const channelConfig = CHANNEL_CONFIG[prospect.canal]
-  const tour = tours.find((t) => t.id === prospect.tour_interes_id)
-  const agent = agents.find((a) => a.id === prospect.agente_id)
+  const statusConfig = STATUS_CONFIG[prospect.status as ProspectStatus]
+  const channelConfig = CHANNEL_CONFIG[(prospect.origin_channel as Channel) || 'whatsapp']
+  const tour = tours.find((t) => t.id === prospect.tour_of_interest)
+  const agent = agents.find((a) => a.id === prospect.assigned_to)
 
-  const dateStr = prospect.fecha_deseada
-    ? new Date(prospect.fecha_deseada).toLocaleDateString('es-MX', {
+  const dateStr = prospect.desired_date
+    ? new Date(prospect.desired_date).toLocaleDateString('es-MX', {
         day: '2-digit',
         month: 'short',
         year: 'numeric'
@@ -27,11 +27,15 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
 
   const handleConvert = () => {
     // Simulated toast for now
-    alert(`Convertir: ${prospect.nombre}`)
+    alert(`Convertir: ${prospect.name}`)
   }
 
   return (
     <div
+      draggable
+      onDragStart={(e) => {
+        e.dataTransfer.setData('prospect_id', prospect.id)
+      }}
       className="bg-white rounded-lg p-4 flex flex-col gap-3 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing border-y border-r border-gray-200"
       style={{ borderLeft: `4px solid ${statusConfig.border}` }}
     >
@@ -41,25 +45,25 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
             className="font-semibold text-gray-900 truncate hover:text-blue-600 transition-colors text-left"
             onClick={() => onProspectClick && onProspectClick(prospect.id)}
           >
-            {prospect.nombre} {prospect.apellido}
+            {prospect.name}
           </button>
           <p className="text-sm text-gray-500 font-mono mt-0.5 flex items-center gap-1">
             <span
               className="material-symbols-outlined text-[16px]"
-              style={{ color: channelConfig.color }}
+              style={{ color: channelConfig?.color || '#000' }}
             >
-              {channelConfig.icon}
+              {channelConfig?.icon || 'help'}
             </span>
-            {prospect.telefono}
+            {prospect.phone}
           </p>
         </div>
         {agent && (
           <div
             className="w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center text-xs font-medium text-white shadow-sm"
-            style={{ backgroundColor: agent.color }}
-            title={agent.nombre}
+            style={{ backgroundColor: agent.color || '#3B82F6' }}
+            title={agent.full_name}
           >
-            {agent.iniciales}
+            {agent.full_name?.substring(0, 2).toUpperCase() || 'AG'}
           </div>
         )}
       </div>
@@ -80,7 +84,7 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
         </div>
         <div className="flex items-center gap-1">
           <span className="material-symbols-outlined text-[16px]">group</span>
-          {prospect.num_personas} pax
+          {prospect.num_people || 1} pax
         </div>
       </div>
 
