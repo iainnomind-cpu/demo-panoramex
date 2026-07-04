@@ -543,6 +543,47 @@ export interface Database {
         }
           Relationships: []
       }
+      view_analytics_kpis: {
+        Row: {
+          leads_today: number
+          leads_in_pipeline: number
+          total_reservations: number
+          total_conversions: number
+        }
+        Relationships: []
+      }
+      view_analytics_funnel: {
+        Row: {
+          status: string
+          count: number
+        }
+        Relationships: []
+      }
+      view_analytics_bot_performance: {
+        Row: {
+          total_leads: number
+          bot_qualified: number
+          human_handoff: number
+        }
+        Relationships: []
+      }
+      view_analytics_surveys: {
+        Row: {
+          average_rating: number
+          rating_1_count: number
+          rating_3_count: number
+          rating_5_count: number
+        }
+        Relationships: []
+      }
+      view_analytics_consumption: {
+        Row: {
+          current_month_messages: number
+          current_month_campaigns: number
+          total_interactions: number
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_current_agent_role: {
@@ -560,6 +601,18 @@ export interface Database {
       cleanup_rate_limit_buckets: {
         Args: Record<string, never>
         Returns: undefined
+      }
+      get_conversions_by_tour: {
+        Args: { start_date: string; end_date: string }
+        Returns: Json[]
+      }
+      get_conversions_by_channel: {
+        Args: { start_date: string; end_date: string }
+        Returns: Json[]
+      }
+      get_agent_performance: {
+        Args: { start_date: string; end_date: string }
+        Returns: Json[]
       }
     }
     Enums: Record<string, never>
