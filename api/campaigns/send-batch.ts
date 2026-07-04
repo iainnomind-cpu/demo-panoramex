@@ -4,8 +4,8 @@
 // template messages with Meta-compliant throttling (≤80 msg/s).
 // ============================================================
 
-import { adminDb } from '../bot/supabase.js'
-import { sendWhatsAppTemplate, sleep } from '../utils/whatsapp.js'
+import { adminDb } from '../bot/supabase'
+import { sendWhatsAppTemplate, sleep } from '../utils/whatsapp'
 
 interface BatchRecipient {
   phone_number: string
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
   let body: SendBatchBody
   try {
-    body = await req.json()
+    body = (await req.json()) as SendBatchBody
   } catch {
     return Response.json({ error: 'Invalid JSON body' }, { status: 400 })
   }

@@ -51,6 +51,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+          Relationships: []
       }
       tour_variants: {
         Row: {
@@ -83,6 +84,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+          Relationships: []
       }
       reservations: {
         Row: {
@@ -130,6 +132,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+          Relationships: []
       }
       reservation_passengers: {
         Row: {
@@ -150,6 +153,7 @@ export interface Database {
           full_name?: string
           sort_order?: number
         }
+          Relationships: []
       }
       agents: {
         Row: {
@@ -176,6 +180,7 @@ export interface Database {
           can_edit_catalog?: boolean
           created_at?: string
         }
+          Relationships: []
       }
       org_settings: {
         Row: {
@@ -199,6 +204,7 @@ export interface Database {
           messages_used?: number
           updated_at?: string
         }
+          Relationships: []
       }
       audit_log: {
         Row: {
@@ -228,6 +234,7 @@ export interface Database {
           metadata?: Json | null
           created_at?: string
         }
+          Relationships: []
       }
       prospects: {
         Row: {
@@ -278,6 +285,7 @@ export interface Database {
           birth_date?: string | null
           created_at?: string
         }
+          Relationships: []
       }
       interactions_timeline: {
         Row: {
@@ -307,6 +315,7 @@ export interface Database {
           metadata?: Json | null
           created_at?: string
         }
+          Relationships: []
       }
       webhook_events: {
         Row: {
@@ -333,6 +342,7 @@ export interface Database {
           created_at?: string
           updated_at?: string | null
         }
+          Relationships: []
       }
       conversations: {
         Row: {
@@ -359,6 +369,7 @@ export interface Database {
           flow_state?: Json | null
           last_activity_at?: string
         }
+          Relationships: []
       }
       messages: {
         Row: {
@@ -403,6 +414,7 @@ export interface Database {
           next_retry_at?: string | null
           created_at?: string
         }
+          Relationships: []
       }
       campaigns: {
         Row: {
@@ -435,6 +447,7 @@ export interface Database {
           created_at?: string
           created_by?: string
         }
+          Relationships: []
       }
       campaign_sends: {
         Row: {
@@ -467,6 +480,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+          Relationships: []
       }
       satisfaction_surveys: {
         Row: {
@@ -493,6 +507,7 @@ export interface Database {
           feedback?: string | null
           created_at?: string
         }
+          Relationships: []
       }
     }
     Views: {
@@ -508,6 +523,7 @@ export interface Database {
           min_capacity_alert: number
           availability_status: 'available' | 'low_availability' | 'sold_out'
         }
+          Relationships: []
       }
     }
     Functions: {
@@ -517,5 +533,6 @@ export interface Database {
       }
     }
     Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
   }
 }

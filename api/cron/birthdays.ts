@@ -5,10 +5,10 @@
 // the birthday WhatsApp template.
 // ============================================================
 
-import { adminDb } from '../bot/supabase.js'
-import { sendWhatsAppTemplate } from '../utils/whatsapp.js'
+import { adminDb } from '../bot/supabase'
+import { sendWhatsAppTemplate } from '../utils/whatsapp'
 
-const PHONE_NUMBER_ID = process.env.META_PHONE_NUMBER_ID || ''
+const phone_ID = process.env.META_phone_ID || ''
 const ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || ''
 const BIRTHDAY_TEMPLATE = process.env.BIRTHDAY_TEMPLATE_NAME || 'feliz_cumpleanos'
 const CRON_SECRET = process.env.CRON_SECRET || ''
@@ -36,8 +36,8 @@ export async function GET(req: Request) {
   // We'll fetch and filter server-side (small dataset expected).
   const { data: prospects, error } = await adminDb
     .from('prospects')
-    .select('id, name, phone_number, birth_date')
-    .not('phone_number', 'is', null)
+    .select('id, name, phone, birth_date')
+    .not('phone', 'is', null)
     .not('birth_date', 'is', null)
 
   if (error) {
@@ -93,9 +93,9 @@ export async function GET(req: Request) {
   for (const prospect of birthdayProspects) {
     try {
       const result = await sendWhatsAppTemplate(
-        PHONE_NUMBER_ID,
+        phone_ID,
         ACCESS_TOKEN,
-        prospect.phone_number,
+        prospect.phone,
         BIRTHDAY_TEMPLATE,
         'es',
         [
@@ -109,18 +109,18 @@ export async function GET(req: Request) {
       await adminDb.from('campaign_sends').insert({
         campaign_id: campaignId,
         prospect_id: prospect.id,
-        phone_number: prospect.phone_number,
+        phone_number: prospect.phone,
         status: 'sent',
         meta_message_id: result?.messages?.[0]?.id ?? null,
       })
 
       sent++
     } catch (err: any) {
-      console.error(`Birthday send failed for ${prospect.phone_number}:`, err.message)
+      console.error(`Birthday send failed for ${prospect.phone}:`, err.message)
       await adminDb.from('campaign_sends').insert({
         campaign_id: campaignId,
         prospect_id: prospect.id,
-        phone_number: prospect.phone_number,
+        phone_number: prospect.phone,
         status: 'failed',
       })
       failed++
