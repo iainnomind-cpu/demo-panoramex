@@ -68,13 +68,13 @@ export const useAnalyticsStore = create<AnalyticsState>((set) => ({
 
       set({
         kpis: (kpisData as unknown) as AnalyticsKPIs,
-        funnel: funnelData as FunnelData[],
+        funnel: (funnelData as unknown) as FunnelData[],
         botPerformance: (botData as unknown) as BotPerformance,
         surveyAggregates: (surveyData as unknown) as SurveyAggregates,
         metaConsumption: (metaData as unknown) as MetaConsumption,
-        conversionByTour: (tourData || []) as ConversionByTour[],
-        conversionByChannel: (channelData || []) as ConversionByChannel[],
-        agentPerformance: (agentData || []) as AgentPerformance[],
+        conversionByTour: (tourData || []) as unknown as ConversionByTour[],
+        conversionByChannel: (channelData || []) as unknown as ConversionByChannel[],
+        agentPerformance: (agentData || []) as unknown as AgentPerformance[],
       })
     } catch (err: any) {
       console.error('Error loading analytics:', err)

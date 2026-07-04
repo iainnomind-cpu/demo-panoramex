@@ -107,7 +107,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       .limit(1)
       .single()
     if (data) {
-      set({ organizationSettings: data as OrganizationSettings })
+      set({ organizationSettings: data as unknown as OrganizationSettings })
     }
   },
 
