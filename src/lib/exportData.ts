@@ -12,7 +12,7 @@ async function fetchAllRecords(table: string) {
 
   while (hasMore) {
     const { data, error } = await supabase
-      .from(table)
+      .from(table as any)
       .select('*')
       .range(page * limit, (page + 1) * limit - 1)
 
