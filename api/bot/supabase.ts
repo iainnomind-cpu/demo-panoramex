@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { Database } from '../../src/lib/database.types.js';
+import { Database } from '../../src/lib/database.types';
 
 // Use the service role key to bypass RLS in the serverless backend
 // WARNING: Never expose the SERVICE_ROLE_KEY to the frontend client

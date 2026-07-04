@@ -5,8 +5,8 @@
 // and sends a post-tour satisfaction survey (interactive buttons).
 // ============================================================
 
-import { adminDb } from '../bot/supabase.js'
-import { sendWhatsAppInteractiveButtons } from '../utils/whatsapp.js'
+import { adminDb } from '../bot/supabase'
+import { sendWhatsAppInteractiveButtons } from '../utils/whatsapp'
 
 const PHONE_NUMBER_ID = process.env.META_PHONE_NUMBER_ID || ''
 const ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || ''

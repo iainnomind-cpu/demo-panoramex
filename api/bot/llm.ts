@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { TourFlow } from './flows.js';
+import { TourFlow } from './flows';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY

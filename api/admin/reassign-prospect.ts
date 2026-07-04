@@ -14,7 +14,7 @@
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { createClient } from '@supabase/supabase-js'
-import type { Database } from '../../src/lib/database.types.js'
+import type { Database } from '../../src/lib/database.types'
 
 const supabaseAdmin = createClient<Database>(
   process.env.VITE_SUPABASE_URL!,

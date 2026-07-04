@@ -40,7 +40,7 @@ export async function sendWhatsAppMessage(
     )
   }
 
-  return await response.json()
+  return (await response.json()) as { messages: Array<{ id: string }> }
 }
 
 /**
@@ -90,7 +90,7 @@ export async function sendWhatsAppTemplate(
     )
   }
 
-  return await response.json()
+  return (await response.json()) as { messages: Array<{ id: string }> }
 }
 
 /**
@@ -138,7 +138,7 @@ export async function sendWhatsAppInteractiveButtons(
     )
   }
 
-  return await response.json()
+  return (await response.json()) as { messages: Array<{ id: string }> }
 }
 
 /**
