@@ -4,6 +4,7 @@ import { adminDb } from '../bot/supabase';
 import { getOrCreateConversation, saveMessage, pauseConversation } from '../bot/state';
 import { generateResponse } from '../bot/llm';
 import { sendWhatsAppMessage } from '../utils/whatsapp';
+import { checkRateLimit } from '../../src/lib/rateLimit';
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
@@ -19,6 +20,13 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  // Rate Limiting Básico (Max 50 reqs / 10 segs por IP)
+  const ip = req.headers.get('x-forwarded-for') || 'unknown';
+  if (!checkRateLimit(ip, 50, 10000)) {
+    console.warn(`Rate limit exceeded for IP: ${ip}`);
+    return new Response('Too Many Requests', { status: 429 });
+  }
+
   const payload = await req.text();
   const signature = req.headers.get('x-hub-signature-256');
 
@@ -44,6 +52,18 @@ export async function POST(req: Request) {
 
 async function processWebhookEvent(body: any) {
   try {
+    // Check global organization status before processing
+    const { data: orgSettings } = await adminDb
+      .from('organization_settings')
+      .select('system_status')
+      .limit(1)
+      .single();
+
+    if (orgSettings?.system_status === 'paused') {
+      console.warn('System is paused. Webhook payload will not be processed.');
+      return;
+    }
+
     // 1. Log event
     const { data: event } = await adminDb.from('webhook_events').insert({ payload: body }).select('id').single();
     if (!event) return;

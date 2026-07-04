@@ -6,7 +6,7 @@ export function TourRankingChart() {
 
   // Mock data based on tours
   const data = tours.slice(0, 5).map((tour, index) => ({
-    name: tour.nombre.substring(0, 15) + (tour.nombre.length > 15 ? '...' : ''),
+    name: tour.name.substring(0, 15) + (tour.name.length > 15 ? '...' : ''),
     ventas: Math.floor(100 / (index + 1)) + Math.floor(Math.random() * 20),
     color: index === 0 ? '#E8483A' : '#1C2E5E' // Coral for top 1, Navy for others
   }))

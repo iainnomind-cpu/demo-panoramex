@@ -15,6 +15,7 @@ import type {
   Campaign,
   ProspectStatus,
   Message,
+  OrganizationSettings,
 } from '../types'
 
 interface AppState {
@@ -26,6 +27,7 @@ interface AppState {
   campaigns: Campaign[]
   dashboardStats: typeof dashboardStats
   currentAgent: Agent | null
+  organizationSettings: OrganizationSettings | null
 
   // Actions
   updateProspectStatus: (id: string, newStatus: ProspectStatus) => void
@@ -33,6 +35,8 @@ interface AppState {
   createReservation: (reservation: Reservation) => void
   loadTours: () => Promise<void>
   updateVariantPrice: (variantId: string, newPrice: number) => void
+  loadSettings: () => Promise<void>
+  updateSettings: (status: 'active' | 'paused', accessToken?: string) => Promise<void>
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -41,8 +45,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   prospects,
   conversations,
   reservations: [],
+  campaigns: [],
   dashboardStats,
   currentAgent: agents.find((a) => a.id === 'a1') || null,
+  organizationSettings: null,
 
   updateProspectStatus: (id, newStatus) =>
     set((state) => ({
@@ -88,9 +94,46 @@ export const useAppStore = create<AppState>((set, get) => ({
     set((state) => ({
       tours: state.tours.map((t) => ({
         ...t,
-        tour_variants: t.tour_variants?.map((v) =>
+        tour_variants: t.tour_variants?.map((v: any) =>
           v.id === variantId ? { ...v, price_per_person: newPrice } : v
         ),
       })),
     })),
+
+  loadSettings: async () => {
+    const { data } = await supabase
+      .from('org_settings')
+      .select('*')
+      .limit(1)
+      .single()
+    if (data) {
+      set({ organizationSettings: data as OrganizationSettings })
+    }
+  },
+
+  /**
+   * updateSettings — routes through the serverless function so the UPDATE
+   * carries the user's JWT and auth.uid() is available in the Postgres trigger.
+   * Requires the caller to pass the current session access_token.
+   */
+  updateSettings: async (status, accessToken?) => {
+    const { organizationSettings } = get()
+    if (!organizationSettings) return
+
+    if (accessToken) {
+      const response = await fetch('/api/admin/system-status', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ status }),
+      })
+      if (response.ok) {
+        set({
+          organizationSettings: { ...organizationSettings, system_status: status },
+        })
+      }
+    }
+  },
 }))

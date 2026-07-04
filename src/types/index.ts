@@ -1,7 +1,7 @@
 // ============================================================
 // PANORAMEX CRM — TypeScript Types & Interfaces
 // ============================================================
-import { Database } from '@/lib/database.types'
+import { Database } from '../lib/database.types'
 
 export type ProspectStatus =
   | 'nuevo'
@@ -99,6 +99,13 @@ export interface SatisfactionSurvey {
   created_at: string
 }
 
+export interface OrganizationSettings {
+  id: string
+  system_status: 'active' | 'paused'
+  updated_at: string
+  updated_by: string | null
+}
+
 // UI Types
 export interface StatusConfig {
   label: string
@@ -175,4 +182,59 @@ export const TOUR_CATEGORY_CONFIG: Record<TourCategory, { label: string; icon: s
   aventura: { label: 'AVENTURA Y NATURALEZA', icon: 'hiking' },
   privado: { label: 'TOUR PRIVADO', icon: 'star' },
   gastronomia: { label: 'GASTRONOMÍA', icon: 'restaurant' },
+}
+
+// ============================================================
+// Analytics Dashboard Types
+// ============================================================
+
+export interface AnalyticsKPIs {
+  leads_today: number
+  leads_in_pipeline: number
+  total_reservations: number
+  total_conversions: number
+}
+
+export interface FunnelData {
+  status: ProspectStatus
+  count: number
+}
+
+export interface BotPerformance {
+  total_leads: number
+  bot_qualified: number
+  human_handoff: number
+}
+
+export interface SurveyAggregates {
+  average_rating: number
+  rating_1_count: number
+  rating_3_count: number
+  rating_5_count: number
+}
+
+export interface MetaConsumption {
+  current_month_messages: number
+  current_month_campaigns: number
+  total_interactions: number
+}
+
+export interface ConversionByTour {
+  tour_name: string
+  conversion_count: number
+}
+
+export interface ConversionByChannel {
+  channel: Channel
+  lead_count: number
+  conversion_count: number
+}
+
+export interface AgentPerformance {
+  agent_id: string
+  agent_name: string
+  leads_assigned: number
+  leads_attended: number
+  conversions: number
+  avg_response_time_minutes: number
 }

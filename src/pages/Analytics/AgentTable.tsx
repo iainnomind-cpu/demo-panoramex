@@ -6,8 +6,8 @@ export function AgentTable() {
   // Mock data for analytics
   const agentStats = agents.map(agent => ({
     ...agent,
-    asignados: agent.prospectos_activos * 3 + 10,
-    convertidos: agent.prospectos_activos * 1 + 2,
+    asignados: 10,
+    convertidos: 2,
     tiempoRespuesta: `${Math.floor(Math.random() * 10 + 2)}m`,
   }))
 
@@ -37,9 +37,9 @@ export function AgentTable() {
                   <td className="p-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-semibold" style={{ backgroundColor: agent.color }}>
-                        {agent.iniciales}
+                        {agent.full_name?.substring(0, 2).toUpperCase()}
                       </div>
-                      <span className="font-medium">{agent.nombre} {agent.apellido}</span>
+                      <span className="font-medium">{agent.full_name}</span>
                     </div>
                   </td>
                   <td className="p-4">{agent.asignados}</td>

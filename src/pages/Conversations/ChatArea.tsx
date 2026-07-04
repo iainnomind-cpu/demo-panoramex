@@ -56,10 +56,10 @@ const ChatArea: React.FC<ChatAreaProps> = ({ conversationId }) => {
       <div className="h-[72px] bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-            {prospect.nombre.charAt(0)}{prospect.apellido.charAt(0)}
+            {prospect.name.charAt(0)}
           </div>
           <div>
-            <h2 className="font-semibold text-gray-800">{prospect.nombre} {prospect.apellido}</h2>
+            <h2 className="font-semibold text-gray-800">{prospect.name}</h2>
             <p className="text-xs text-gray-500 flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-green-500"></span>
               En línea

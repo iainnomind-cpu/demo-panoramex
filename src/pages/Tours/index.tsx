@@ -17,7 +17,7 @@ export const Tours: React.FC = () => {
 
   const filteredTours = selectedCategory === 'todos' 
     ? tours 
-    : tours.filter(tour => tour.categoria === selectedCategory);
+    : tours.filter(tour => tour.category === selectedCategory);
 
   const handleViewDetails = (tour: Tour) => {
     setSelectedTour(tour);

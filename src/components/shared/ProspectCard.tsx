@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Prospect, STATUS_CONFIG, CHANNEL_CONFIG } from '../../types'
+import { Prospect, STATUS_CONFIG, CHANNEL_CONFIG, ProspectStatus, Channel } from '../../types'
 import { useAppStore } from '../../store/useAppStore'
 
 interface ProspectCardProps {
@@ -72,7 +72,7 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
         {tour && (
           <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-700 max-w-full">
             <span className="material-symbols-outlined text-[14px]">map</span>
-            <span className="truncate">{tour.nombre}</span>
+            <span className="truncate">{tour.name}</span>
           </span>
         )}
       </div>

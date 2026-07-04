@@ -82,8 +82,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(404).json({ error: 'Prospect not found' })
   }
 
-  // 5. Perform the reassignment using service_role (bypasses RLS)
-  const { error: updateError } = await supabaseAdmin
+  // 5. Perform the reassignment using the user's context so auth.uid() works in the trigger
+  const { error: updateError } = await supabaseUser
     .from('prospects')
     .update({ assigned_to: new_agent_id })
     .eq('id', prospect_id)
@@ -93,30 +93,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'Failed to reassign prospect' })
   }
 
-  // 6. Write audit log — service_role bypasses the "no INSERT for authenticated" RLS policy
-  const { error: auditError } = await supabaseAdmin
-    .from('audit_log')
-    .insert({
-      actor_id: user.id,
-      action: 'REASSIGN_PROSPECT',
-      entity_type: 'prospect',
-      entity_id: prospect_id,
-      metadata: {
-        old_agent_id: currentProspect.assigned_to,
-        new_agent_id,
-      },
-    })
-
-  if (auditError) {
-    // Audit failure is critical — log it but do NOT silently discard.
-    // The prospect is already reassigned, so we return a partial success warning.
-    console.error('[reassign-prospect] AUDIT LOG FAILED:', auditError)
-    return res.status(207).json({
-      success: true,
-      message: 'Prospect reassigned but audit log entry failed. Investigate immediately.',
-      audit_error: auditError.message,
-    })
-  }
+  // 6. Write audit log is now handled automatically by PostgreSQL triggers.
 
   return res.status(200).json({
     success: true,

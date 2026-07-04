@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Prospect, STATUS_CONFIG, CHANNEL_CONFIG } from '../../types'
+import { Prospect, STATUS_CONFIG, CHANNEL_CONFIG, ProspectStatus, Channel } from '../../types'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { Prospect360Modal } from '../../components/shared/Prospect360Modal'
@@ -25,8 +25,8 @@ export function RecentActivity({ prospects }: RecentActivityProps) {
 
       <div className="flex-1 overflow-auto divide-y divide-gray-50">
         {prospects.slice(0, 4).map((prospect) => {
-          const statusConfig = STATUS_CONFIG[prospect.estado]
-          const channelConfig = CHANNEL_CONFIG[prospect.canal]
+          const statusConfig = STATUS_CONFIG[prospect.status as ProspectStatus]
+          const channelConfig = CHANNEL_CONFIG[(prospect.origin_channel as Channel) || 'whatsapp']
 
           return (
             <div 
@@ -42,11 +42,11 @@ export function RecentActivity({ prospects }: RecentActivityProps) {
               </div>
               <div className="min-w-0 flex-1">
                 <h4 className="text-sm font-medium text-gray-900 truncate">
-                  {prospect.nombre} {prospect.apellido}
+                  {prospect.name}
                 </h4>
-                <span className="text-xs text-gray-400 font-mono">{prospect.telefono}</span>
+                <span className="text-xs text-gray-400 font-mono">{prospect.phone}</span>
               </div>
-              <Badge status={prospect.estado} />
+              <Badge status={prospect.status as ProspectStatus} />
             </div>
           )
         })}

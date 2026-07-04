@@ -10,6 +10,7 @@ import { Tours } from '../pages/Tours'
 import { Reservations } from '../pages/Reservations'
 import { Campaigns } from '../pages/Campaigns'
 import { Analytics } from '../pages/Analytics'
+import { SettingsPage } from '../pages/Settings'
 
 export function AppRouter() {
   return (
@@ -30,6 +31,7 @@ export function AppRouter() {
             <Route path="reservaciones" element={<Reservations />} />
             <Route path="campanas" element={<Campaigns />} />
             <Route path="analytics" element={<Analytics />} />
+            <Route path="settings" element={<SettingsPage />} />
           </Route>
         </Route>
       </Route>

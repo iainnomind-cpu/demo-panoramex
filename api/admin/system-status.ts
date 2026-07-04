@@ -91,8 +91,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
   }
 
-  // 5. Update org_settings using service_role (bypasses RLS)
-  const { error: updateError } = await supabaseAdmin
+  // 5. Update org_settings using the user's JWT context so auth.uid() resolves
+  //    correctly inside the PostgreSQL audit trigger (fn_audit_sensitive_changes).
+  //    The RLS policy "org_settings_update_admin" (added in 00007) allows this.
+  const { error: updateError } = await supabaseUser
     .from('org_settings')
     .update({
       system_status: status,
@@ -105,31 +107,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'Failed to update system status' })
   }
 
-  // 6. Write audit log
-  const action = status === 'paused' ? 'PAUSE_SYSTEM' : 'ACTIVATE_SYSTEM'
-
-  const { error: auditError } = await supabaseAdmin
-    .from('audit_log')
-    .insert({
-      actor_id: user.id,
-      action,
-      entity_type: 'org_settings',
-      entity_id: String(currentSettings.id),
-      metadata: {
-        old_status: currentSettings.system_status,
-        new_status: status,
-      },
-    })
-
-  if (auditError) {
-    console.error('[system-status] AUDIT LOG FAILED:', auditError)
-    return res.status(207).json({
-      success: true,
-      new_status: status,
-      message: 'Status updated but audit log entry failed. Investigate immediately.',
-      audit_error: auditError.message,
-    })
-  }
+  // 6. Audit log is now written automatically by the PostgreSQL trigger
+  //    trg_audit_org_settings → fn_audit_sensitive_changes().
 
   return res.status(200).json({
     success: true,

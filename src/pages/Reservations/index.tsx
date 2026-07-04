@@ -12,7 +12,7 @@ export function Reservations() {
     // In a real app we would filter by prospect name, tour, id, etc.
     // Here we just mock a simple filter
     return res.id.toLowerCase().includes(searchTerm.toLowerCase()) || 
-           res.estado.toLowerCase().includes(searchTerm.toLowerCase())
+           res.status.toLowerCase().includes(searchTerm.toLowerCase())
   })
 
   return (

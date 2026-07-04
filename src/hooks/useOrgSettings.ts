@@ -1,31 +1,27 @@
 /**
  * useOrgSettings.ts — Panoramex CRM
  *
- * React Query hook for fetching org_settings with Supabase Realtime subscription.
+ * React Query hook for fetching organization_settings with Supabase Realtime subscription.
  *
- * When an admin pauses/activates the system via /api/admin/system-status,
+ * When an admin pauses/activates the system,
  * the change propagates to all connected clients through the Realtime channel,
  * which then invalidates the React Query cache and triggers a re-render.
- *
- * This allows the SystemGuard to react in near-real-time without polling.
  */
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import type { Database } from '../lib/database.types'
 import { useAuthStore } from '../store/authStore'
+import { OrganizationSettings } from '../types'
 
-export type OrgSettingsRow = Database['public']['Tables']['org_settings']['Row']
+const ORG_SETTINGS_KEY = ['organization_settings'] as const
 
-const ORG_SETTINGS_KEY = ['org_settings'] as const
-
-/** Fetch the single org_settings row. */
+/** Fetch the single organization_settings row. */
 export function useOrgSettings() {
   const session = useAuthStore((s) => s.session)
   const queryClient = useQueryClient()
 
-  // Subscribe to Realtime changes on org_settings so that when an admin
+  // Subscribe to Realtime changes on organization_settings so that when an admin
   // pauses/unpauses the system, all active sessions pick it up immediately.
   useEffect(() => {
     if (!session) return
@@ -36,7 +32,6 @@ export function useOrgSettings() {
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'org_settings' },
         () => {
-          // Invalidate cache to trigger an immediate re-fetch when org_settings changes
           queryClient.invalidateQueries({ queryKey: ORG_SETTINGS_KEY })
         }
       )
@@ -47,7 +42,7 @@ export function useOrgSettings() {
     }
   }, [session, queryClient])
 
-  return useQuery<OrgSettingsRow, Error>({
+  return useQuery<OrganizationSettings, Error>({
     queryKey: ORG_SETTINGS_KEY,
     queryFn: async () => {
       const { data, error } = await supabase
@@ -58,11 +53,9 @@ export function useOrgSettings() {
         .single()
 
       if (error) throw new Error(error.message)
-      return data
+      return data as OrganizationSettings
     },
-    // Refetch every 30 seconds as a fallback if Realtime misses an update
     refetchInterval: 30_000,
-    // Don't query if user isn't authenticated
     enabled: !!session,
   })
 }
@@ -73,13 +66,15 @@ type SystemStatus = 'active' | 'paused'
 
 /**
  * useToggleSystemStatus — Admin-only mutation.
- * Routes through the Vercel serverless function (service_role protected).
+ * Routes through the /api/admin/system-status serverless function so that
+ * the UPDATE is executed in the user's JWT context, allowing auth.uid() to
+ * resolve correctly inside the PostgreSQL audit trigger.
  */
 export function useToggleSystemStatus() {
   const queryClient = useQueryClient()
   const session = useAuthStore((s) => s.session)
 
-  const toggle = async (status: SystemStatus): Promise<void> => {
+  const toggle = async (_id: string, status: SystemStatus): Promise<void> => {
     const jwt = session?.access_token
     if (!jwt) throw new Error('Not authenticated')
 
@@ -93,12 +88,10 @@ export function useToggleSystemStatus() {
     })
 
     if (!response.ok) {
-      const body = await response.json() as { error?: string }
-      throw new Error(body.error ?? 'Failed to update system status')
+      const body = await response.json().catch(() => ({}))
+      throw new Error(body?.error ?? `Request failed with status ${response.status}`)
     }
 
-    // Optimistically invalidate — Realtime will also fire but this ensures
-    // the triggering admin sees the update immediately.
     queryClient.invalidateQueries({ queryKey: ORG_SETTINGS_KEY })
   }
 

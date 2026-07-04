@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from '../../components/ui/Modal';
-import { Tour, TOUR_CATEGORY_CONFIG } from '../../types';
+import { Tour, TOUR_CATEGORY_CONFIG, TourCategory } from '../../types';
 import { Button } from '../../components/ui/Button';
 
 interface TourDetailModalProps {
@@ -13,7 +13,7 @@ interface TourDetailModalProps {
 export const TourDetailModal: React.FC<TourDetailModalProps> = ({ isOpen, onClose, tour, onReserve }) => {
   if (!tour) return null;
 
-  const categoryConfig = TOUR_CATEGORY_CONFIG[tour.categoria];
+  const categoryConfig = TOUR_CATEGORY_CONFIG[(tour.category || 'cultural') as TourCategory];
 
   return (
     <Modal
@@ -39,8 +39,8 @@ export const TourDetailModal: React.FC<TourDetailModalProps> = ({ isOpen, onClos
         {/* Header Image */}
         <div className="relative aspect-video rounded-xl overflow-hidden">
           <img 
-            src={tour.imagen} 
-            alt={tour.nombre} 
+            src={tour.image_url || ''} 
+            alt={tour.name} 
             className="w-full h-full object-cover"
             onError={(e) => {
               e.currentTarget.src = 'https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?w=800&auto=format&fit=crop&q=60';
@@ -55,22 +55,22 @@ export const TourDetailModal: React.FC<TourDetailModalProps> = ({ isOpen, onClos
         {/* Title and Price */}
         <div className="flex justify-between items-start gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-on-surface">{tour.nombre}</h2>
+            <h2 className="text-2xl font-bold text-on-surface">{tour.name}</h2>
             <div className="flex items-center gap-1 text-on-surface-variant mt-1">
               <span className="material-symbols-outlined text-[16px]">location_on</span>
-              {tour.ubicacion}
+              {''}
             </div>
           </div>
           <div className="text-right">
             <p className="text-sm text-on-surface-variant">Precio Base</p>
-            <p className="text-2xl font-bold text-coral">${tour.precio_base.toLocaleString('es-MX')}</p>
+            <p className="text-2xl font-bold text-coral">${(tour.tour_variants?.[0]?.price_per_person || 0).toLocaleString('es-MX')}</p>
           </div>
         </div>
 
         {/* Description */}
         <div>
           <h3 className="text-lg font-semibold text-on-surface mb-2">Descripción</h3>
-          <p className="text-on-surface-variant whitespace-pre-line">{tour.descripcion}</p>
+          <p className="text-on-surface-variant whitespace-pre-line">{tour.description}</p>
         </div>
 
         {/* Quick Info Grid */}
@@ -81,7 +81,7 @@ export const TourDetailModal: React.FC<TourDetailModalProps> = ({ isOpen, onClos
             </div>
             <div>
               <p className="text-xs text-on-surface-variant">Horario</p>
-              <p className="text-sm font-medium">{tour.horario_salida} - {tour.horario_regreso}</p>
+              <p className="text-sm font-medium">8:00 AM - 6:00 PM</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -90,7 +90,7 @@ export const TourDetailModal: React.FC<TourDetailModalProps> = ({ isOpen, onClos
             </div>
             <div>
               <p className="text-xs text-on-surface-variant">Días Disponibles</p>
-              <p className="text-sm font-medium capitalize">{tour.dias_disponibles.join(', ')}</p>
+              <p className="text-sm font-medium capitalize">Todos</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -99,7 +99,7 @@ export const TourDetailModal: React.FC<TourDetailModalProps> = ({ isOpen, onClos
             </div>
             <div>
               <p className="text-xs text-on-surface-variant">Duración</p>
-              <p className="text-sm font-medium">{tour.duracion_horas} horas</p>
+              <p className="text-sm font-medium">0 horas</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -108,7 +108,7 @@ export const TourDetailModal: React.FC<TourDetailModalProps> = ({ isOpen, onClos
             </div>
             <div>
               <p className="text-xs text-on-surface-variant">Capacidad</p>
-              <p className="text-sm font-medium">{tour.capacidad_min} - {tour.capacidad_max} personas</p>
+              <p className="text-sm font-medium">0 - {tour.min_capacity_alert} personas</p>
             </div>
           </div>
         </div>
@@ -117,7 +117,7 @@ export const TourDetailModal: React.FC<TourDetailModalProps> = ({ isOpen, onClos
         <div>
           <h3 className="text-lg font-semibold text-on-surface mb-3">¿Qué incluye?</h3>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {tour.incluye.map((item, idx) => (
+            {(tour.inclusions || []).map((item, idx) => (
               <li key={idx} className="flex items-start gap-2 text-on-surface-variant">
                 <span className="material-symbols-outlined text-coral text-[20px]">check_circle</span>
                 <span className="text-sm">{item}</span>

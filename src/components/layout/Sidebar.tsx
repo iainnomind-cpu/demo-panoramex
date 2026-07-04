@@ -9,6 +9,7 @@ const MENU_ITEMS = [
   { path: '/reservaciones', label: 'Reservaciones', icon: 'event_available' },
   { path: '/campanas', label: 'Campañas', icon: 'campaign' },
   { path: '/analytics', label: 'Analytics', icon: 'bar_chart' },
+  { path: '/settings', label: 'Ajustes', icon: 'settings' },
 ];
 
 export const Sidebar: React.FC = () => {

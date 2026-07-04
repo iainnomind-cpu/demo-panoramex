@@ -53,12 +53,12 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedId, onSelec
               }`}
             >
               <div className="w-12 h-12 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center text-blue-600 font-bold text-lg">
-                {prospect.nombre.charAt(0)}{prospect.apellido.charAt(0)}
+                {prospect.name.charAt(0)}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-center mb-1">
                   <h3 className="font-semibold text-gray-900 truncate">
-                    {prospect.nombre} {prospect.apellido}
+                    {prospect.name}
                   </h3>
                   <span className={`text-xs ${conv.no_leidos > 0 && !isSelected ? 'text-green-600 font-medium' : 'text-gray-500'}`}>
                     {timeString}

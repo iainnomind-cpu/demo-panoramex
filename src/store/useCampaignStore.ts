@@ -67,7 +67,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
   createCampaign: async (campaignData) => {
     const { data, error } = await supabase
       .from('campaigns')
-      .insert(campaignData)
+      .insert(campaignData as any)
       .select()
       .single()
 
@@ -82,8 +82,8 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
   },
 
   updateCampaignStatus: async (campaignId: string, status: Campaign['status']) => {
-    const { error } = await supabase
-      .from('campaigns')
+    const { error } = await (supabase
+      .from('campaigns') as any)
       .update({ status })
       .eq('id', campaignId)
 

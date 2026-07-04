@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppStore } from '../../store/useAppStore';
-import { CHANNEL_CONFIG, STATUS_CONFIG, TOUR_CATEGORY_CONFIG } from '../../types';
+import { CHANNEL_CONFIG, STATUS_CONFIG, TOUR_CATEGORY_CONFIG, Channel, ProspectStatus, TourCategory } from '../../types';
 
 interface ProspectProfileProps {
   conversationId: string | null;
@@ -23,18 +23,18 @@ const ProspectProfile: React.FC<ProspectProfileProps> = ({ conversationId }) => 
 
   if (!prospect) return null;
 
-  const channelConfig = CHANNEL_CONFIG[prospect.canal];
-  const statusConfig = STATUS_CONFIG[prospect.estado];
-  const tour = tours.find(t => t.id === prospect.tour_interes_id);
+  const channelConfig = CHANNEL_CONFIG[(prospect.origin_channel || 'whatsapp') as Channel];
+  const statusConfig = STATUS_CONFIG[(prospect.status || 'nuevo') as ProspectStatus];
+  const tour = tours.find(t => t.id === prospect.tour_of_interest);
 
   return (
     <div className="w-[300px] bg-white border-l border-gray-200 h-full flex flex-col overflow-y-auto">
       {/* Profile Header */}
       <div className="p-6 flex flex-col items-center border-b border-gray-100 text-center">
         <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-3xl mb-4 shadow-sm border-2 border-white ring-2 ring-gray-100">
-          {prospect.nombre.charAt(0)}{prospect.apellido.charAt(0)}
+          {prospect.name.charAt(0)}
         </div>
-        <h2 className="text-xl font-bold text-gray-800">{prospect.nombre} {prospect.apellido}</h2>
+        <h2 className="text-xl font-bold text-gray-800">{prospect.name}</h2>
         <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: statusConfig.bg, color: statusConfig.color, border: `1px solid ${statusConfig.border}` }}>
           <span className="material-symbols-outlined text-[14px]">{statusConfig.icon}</span>
           {statusConfig.label}
@@ -51,21 +51,11 @@ const ProspectProfile: React.FC<ProspectProfileProps> = ({ conversationId }) => 
           <div className="flex items-start gap-3">
             <span className="material-symbols-outlined text-gray-400 text-[20px] mt-0.5">phone</span>
             <div>
-              <p className="text-sm font-medium text-gray-900">{prospect.telefono}</p>
+              <p className="text-sm font-medium text-gray-900">{prospect.phone}</p>
               <p className="text-xs text-gray-500">Móvil</p>
             </div>
           </div>
           
-          {prospect.email && (
-            <div className="flex items-start gap-3">
-              <span className="material-symbols-outlined text-gray-400 text-[20px] mt-0.5">mail</span>
-              <div>
-                <p className="text-sm font-medium text-gray-900 break-all">{prospect.email}</p>
-                <p className="text-xs text-gray-500">Trabajo</p>
-              </div>
-            </div>
-          )}
-
           <div className="flex items-start gap-3">
             <span className="material-symbols-outlined text-[20px] mt-0.5" style={{ color: channelConfig.color }}>
               {channelConfig.icon}
@@ -87,18 +77,18 @@ const ProspectProfile: React.FC<ProspectProfileProps> = ({ conversationId }) => 
             <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
               <div className="flex items-center gap-2 mb-2">
                 <span className="material-symbols-outlined text-blue-600 text-[20px]">
-                  {TOUR_CATEGORY_CONFIG[tour.categoria]?.icon || 'tour'}
+                  {TOUR_CATEGORY_CONFIG[(tour.category || 'cultural') as TourCategory]?.icon || 'tour'}
                 </span>
-                <p className="text-sm font-semibold text-gray-800 line-clamp-1">{tour.nombre}</p>
+                <p className="text-sm font-semibold text-gray-800 line-clamp-1">{tour.name}</p>
               </div>
               <div className="flex justify-between items-center text-xs text-gray-500 mt-2">
                 <span className="flex items-center gap-1">
                   <span className="material-symbols-outlined text-[14px]">group</span>
-                  {prospect.num_personas} pax
+                  {prospect.num_people} pax
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="material-symbols-outlined text-[14px]">calendar_month</span>
-                  {prospect.fecha_deseada ? new Date(prospect.fecha_deseada).toLocaleDateString() : 'Por definir'}
+                  {prospect.desired_date ? new Date(prospect.desired_date).toLocaleDateString() : 'Por definir'}
                 </span>
               </div>
             </div>
@@ -110,11 +100,11 @@ const ProspectProfile: React.FC<ProspectProfileProps> = ({ conversationId }) => 
         <hr className="border-gray-100" />
 
         {/* Labels */}
-        {prospect.etiquetas && prospect.etiquetas.length > 0 && (
+        {prospect.tags && prospect.tags.length > 0 && (
           <div className="space-y-3">
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Etiquetas</h3>
             <div className="flex flex-wrap gap-2">
-              {prospect.etiquetas.map(etiqueta => (
+              {prospect.tags.map(etiqueta => (
                 <span key={etiqueta} className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium border border-gray-200">
                   {etiqueta}
                 </span>

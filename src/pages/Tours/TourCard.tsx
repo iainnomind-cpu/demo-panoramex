@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tour, TOUR_CATEGORY_CONFIG } from '../../types';
+import { Tour, TOUR_CATEGORY_CONFIG, TourCategory } from '../../types';
 import { Button } from '../../components/ui/Button';
 
 interface TourCardProps {
@@ -9,15 +9,15 @@ interface TourCardProps {
 }
 
 export const TourCard: React.FC<TourCardProps> = ({ tour, onViewDetails, onReserve }) => {
-  const categoryConfig = TOUR_CATEGORY_CONFIG[tour.categoria];
+  const categoryConfig = TOUR_CATEGORY_CONFIG[(tour.category as TourCategory) || 'cultural'];
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 group flex flex-col">
       {/* Image - taller aspect ratio */}
       <div className="relative aspect-[16/10] overflow-hidden">
         <img 
-          src={tour.imagen} 
-          alt={tour.nombre} 
+          src={tour.image_url || ''} 
+          alt={tour.name} 
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           onError={(e) => {
             e.currentTarget.src = 'https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?w=800&auto=format&fit=crop&q=60';
@@ -33,10 +33,10 @@ export const TourCard: React.FC<TourCardProps> = ({ tour, onViewDetails, onReser
         
         {/* Title over image */}
         <div className="absolute bottom-4 left-4 right-4 text-white">
-          <h3 className="font-bold text-lg leading-snug">{tour.nombre}</h3>
+          <h3 className="font-bold text-lg leading-snug">{tour.name}</h3>
           <div className="flex items-center gap-1 text-white/80 text-xs mt-1">
             <span className="material-symbols-outlined text-[14px]">location_on</span>
-            {tour.ubicacion}
+            {''}
           </div>
         </div>
       </div>
@@ -47,23 +47,23 @@ export const TourCard: React.FC<TourCardProps> = ({ tour, onViewDetails, onReser
         <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
           <div className="flex items-center gap-1">
             <span className="material-symbols-outlined text-[16px]">schedule</span>
-            {tour.duracion_horas} hrs
+            0 hrs
           </div>
           <div className="flex items-center gap-1">
             <span className="material-symbols-outlined text-[16px]">group</span>
-            Hasta {tour.capacidad_max} pax
+            Hasta {tour.min_capacity_alert} pax
           </div>
         </div>
 
         <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-5 flex-1">
-          {tour.descripcion}
+          {tour.description}
         </p>
 
         {/* Price */}
         <div className="mb-5 pb-5 border-b border-gray-100">
           <span className="text-xs text-gray-400">Desde</span>
           <p className="text-2xl font-bold text-coral">
-            ${tour.precio_base.toLocaleString('es-MX')} <span className="text-xs font-normal text-gray-400">MXN</span>
+            ${(tour.tour_variants?.[0]?.price_per_person || 0).toLocaleString('es-MX')} <span className="text-xs font-normal text-gray-400">MXN</span>
           </p>
         </div>
         

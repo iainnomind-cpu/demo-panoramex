@@ -7,23 +7,25 @@
  */
 
 import { useAuthStore } from '../store/authStore'
-import { useToggleSystemStatus } from '../hooks/useOrgSettings'
+import { useToggleSystemStatus, useOrgSettings } from '../hooks/useOrgSettings'
 import { useState } from 'react'
 
 export function SystemPaused() {
   const agent = useAuthStore((s) => s.agent)
   const signOut = useAuthStore((s) => s.signOut)
   const { toggle } = useToggleSystemStatus()
+  const { data: orgSettings } = useOrgSettings()
   const [activating, setActivating] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const isAdmin = agent?.role === 'admin'
 
   const handleActivate = async () => {
+    if (!orgSettings?.id) return
     setActivating(true)
     setError(null)
     try {
-      await toggle('active')
+      await toggle(orgSettings.id, 'active')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error desconocido')
     } finally {

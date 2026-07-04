@@ -32,8 +32,8 @@ export function TopTours({ tours }: TopToursProps) {
             onClick={() => navigate('/tours')}
           >
             <img 
-              src={tour.imagen} 
-              alt={tour.nombre} 
+              src={tour.image_url || ''} 
+              alt={tour.name} 
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               onError={(e) => {
                 e.currentTarget.src = 'https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?w=800&auto=format&fit=crop&q=60';
@@ -43,14 +43,14 @@ export function TopTours({ tours }: TopToursProps) {
             
             <div className="absolute bottom-0 left-0 p-4 w-full">
               <h4 className="text-white font-semibold text-sm leading-tight mb-1 line-clamp-2">
-                {tour.nombre}
+                {tour.name}
               </h4>
               <div className="flex items-center justify-between">
                 <span className="text-white/70 text-xs">
                   {sales[index]} reservas
                 </span>
                 <span className="text-white font-bold text-sm">
-                  ${tour.precio_base.toLocaleString('es-MX')}
+                  ${(tour.tour_variants?.[0]?.price_per_person || 0).toLocaleString('es-MX')}
                 </span>
               </div>
             </div>

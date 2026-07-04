@@ -95,7 +95,7 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onCl
                 Tour Seleccionado
               </label>
               <div className="w-full rounded-md border border-outline-variant bg-surface-variant/50 py-2 px-3 text-sm text-on-surface">
-                {tour ? tour.nombre : 'Seleccionar un tour...'}
+                {tour ? tour.name : 'Seleccionar un tour...'}
               </div>
             </div>
             <Input 

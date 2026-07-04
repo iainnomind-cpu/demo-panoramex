@@ -3,7 +3,7 @@ import { Modal } from '../ui/Modal'
 import { Button } from '../ui/Button'
 import { Badge } from '../ui/Badge'
 import { useAppStore } from '../../store/useAppStore'
-import { CHANNEL_CONFIG } from '../../types'
+import { CHANNEL_CONFIG, Channel, ProspectStatus } from '../../types'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -23,9 +23,9 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
   const prospect = prospects.find(p => p.id === prospectId)
   if (!prospect) return null
 
-  const channelConfig = CHANNEL_CONFIG[prospect.canal]
-  const tour = tours.find(t => t.id === prospect.tour_interes_id)
-  const agent = agents.find(a => a.id === prospect.agente_id)
+  const channelConfig = CHANNEL_CONFIG[(prospect.origin_channel || 'whatsapp') as Channel]
+  const tour = tours.find(t => t.id === prospect.tour_of_interest)
+  const agent = agents.find(a => a.id === prospect.assigned_to)
 
   // Find latest messages or activity
   const conversation = conversations.find(c => c.prospect_id === prospectId)
@@ -42,12 +42,12 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
         <div className="w-full md:w-1/3 flex flex-col gap-6">
           <div className="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm text-center">
             <div className="w-20 h-20 mx-auto rounded-full bg-navy text-white flex items-center justify-center text-2xl font-bold mb-3 shadow-md">
-              {prospect.nombre[0]}{prospect.apellido[0]}
+              {prospect.name[0]}
             </div>
-            <h3 className="text-xl font-bold text-on-surface">{prospect.nombre} {prospect.apellido}</h3>
-            <p className="font-mono text-sm text-on-surface-variant mt-1">{prospect.telefono}</p>
+            <h3 className="text-xl font-bold text-on-surface">{prospect.name}</h3>
+            <p className="font-mono text-sm text-on-surface-variant mt-1">{prospect.phone}</p>
             <div className="mt-4 flex justify-center">
-              <Badge status={prospect.estado} />
+              <Badge status={prospect.status as ProspectStatus} />
             </div>
           </div>
 
@@ -59,7 +59,7 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
                 <p className="text-xs text-on-surface-variant mb-1">Tour de Interés</p>
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-coral text-lg">map</span>
-                  <span className="text-sm font-medium">{tour?.nombre || 'General'}</span>
+                  <span className="text-sm font-medium">{tour?.name || 'General'}</span>
                 </div>
               </div>
               
@@ -67,7 +67,7 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
                 <p className="text-xs text-on-surface-variant mb-1">Pasajeros</p>
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-gray-400 text-lg">group</span>
-                  <span className="text-sm">{prospect.num_personas} Personas</span>
+                  <span className="text-sm">{prospect.num_people || 1} Personas</span>
                 </div>
               </div>
 
@@ -75,7 +75,7 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
                 <p className="text-xs text-on-surface-variant mb-1">Canal de Adquisición</p>
                 <div className="flex items-center gap-2" style={{ color: channelConfig.color }}>
                   <span className="material-symbols-outlined text-lg">{channelConfig.icon}</span>
-                  <span className="text-sm capitalize font-medium">{prospect.canal}</span>
+                  <span className="text-sm capitalize font-medium">{prospect.origin_channel}</span>
                 </div>
               </div>
 
@@ -83,9 +83,9 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
                 <p className="text-xs text-on-surface-variant mb-1">Asignado a</p>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-full text-white flex items-center justify-center text-[10px] font-bold" style={{ backgroundColor: agent?.color || '#ccc' }}>
-                    {agent?.iniciales}
+                    {agent?.full_name?.substring(0, 2).toUpperCase()}
                   </div>
-                  <span className="text-sm">{agent?.nombre} {agent?.apellido}</span>
+                  <span className="text-sm">{agent?.full_name}</span>
                 </div>
               </div>
             </div>
@@ -114,7 +114,7 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
                 <div className="absolute w-3 h-3 bg-white border-2 border-primary rounded-full -left-[7px] top-1"></div>
                 <p className="text-xs text-on-surface-variant mb-1">{format(new Date(prospect.created_at), 'd MMM yyyy, HH:mm', { locale: es })}</p>
                 <p className="text-sm text-on-surface font-medium">Prospecto creado en sistema</p>
-                <p className="text-xs text-on-surface-variant mt-1">Origen: {prospect.canal}</p>
+                <p className="text-xs text-on-surface-variant mt-1">Origen: {prospect.origin_channel}</p>
               </div>
 
               {conversation?.mensajes.map((msg, idx) => (
