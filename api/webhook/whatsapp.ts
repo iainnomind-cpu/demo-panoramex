@@ -1,10 +1,10 @@
 import { waitUntil } from '@vercel/functions';
-import { verifyMetaSignature } from '../bot/crypto.js';
-import { adminDb } from '../bot/supabase.js';
-import { getOrCreateConversation, saveMessage, pauseConversation } from '../bot/state.js';
-import { generateResponse } from '../bot/llm.js';
-import { sendWhatsAppMessage } from '../utils/whatsapp.js';
-import { checkRateLimit } from '../../src/lib/rateLimit.js';
+import { verifyMetaSignature } from '../bot/crypto';
+import { adminDb } from '../bot/supabase';
+import { getOrCreateConversation, saveMessage, pauseConversation } from '../bot/state';
+import { generateResponse } from '../bot/llm';
+import { sendWhatsAppMessage } from '../utils/whatsapp';
+import { checkRateLimit } from '../../src/lib/rateLimit';
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
@@ -20,10 +20,11 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  // Rate Limiting Básico (Max 50 reqs / 10 segs por IP)
-  const ip = req.headers.get('x-forwarded-for') || 'unknown';
-  if (!checkRateLimit(ip, 50, 10000)) {
-    console.warn(`Rate limit exceeded for IP: ${ip}`);
+  // Rate Limiting persistente con Supabase (Max 50 reqs / 10 segs por IP)
+  const ip = (req.headers.get('x-forwarded-for') || 'unknown').split(',')[0].trim();
+  const { allowed } = await checkRateLimit(adminDb, `ip:${ip}`, 50, 10_000);
+  if (!allowed) {
+    console.warn(`[RateLimit] Excedido para IP: ${ip}`);
     return new Response('Too Many Requests', { status: 429 });
   }
 
@@ -54,12 +55,12 @@ async function processWebhookEvent(body: any) {
   try {
     // Check global organization status before processing
     const { data: orgSettings } = await adminDb
-      .from('organization_settings')
+      .from('org_settings')
       .select('system_status')
       .limit(1)
       .single();
 
-    if (orgSettings?.system_status === 'paused') {
+    if (orgSettings === null || orgSettings.system_status === 'paused') {
       console.warn('System is paused. Webhook payload will not be processed.');
       return;
     }

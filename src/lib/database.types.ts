@@ -509,6 +509,24 @@ export interface Database {
         }
           Relationships: []
       }
+      rate_limit_buckets: {
+        Row: {
+          key: string
+          window_start: string
+          count: number
+        }
+        Insert: {
+          key: string
+          window_start: string
+          count?: number
+        }
+        Update: {
+          key?: string
+          window_start?: string
+          count?: number
+        }
+          Relationships: []
+      }
     }
     Views: {
       tour_availability_view: {
@@ -530,6 +548,18 @@ export interface Database {
       get_current_agent_role: {
         Args: Record<string, never>
         Returns: string
+      }
+      upsert_rate_limit: {
+        Args: {
+          p_key: string
+          p_window_start: string
+          p_limit: number
+        }
+        Returns: Json
+      }
+      cleanup_rate_limit_buckets: {
+        Args: Record<string, never>
+        Returns: undefined
       }
     }
     Enums: Record<string, never>
