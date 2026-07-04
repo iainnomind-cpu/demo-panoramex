@@ -1,9 +1,9 @@
 import { waitUntil } from '@vercel/functions';
-import { verifyMetaSignature } from '../bot/crypto';
-import { adminDb } from '../bot/supabase';
-import { getOrCreateConversation, saveMessage, pauseConversation } from '../bot/state';
-import { generateResponse } from '../bot/llm';
-import { sendWhatsAppMessage } from '../utils/whatsapp';
+import { verifyMetaSignature } from '../_bot/crypto';
+import { adminDb } from '../_bot/supabase';
+import { getOrCreateConversation, saveMessage, pauseConversation } from '../_bot/state';
+import { generateResponse } from '../_bot/llm';
+import { sendWhatsAppMessage } from '../_utils/whatsapp';
 import { checkRateLimit } from '../../src/lib/rateLimit';
 
 export async function GET(req: Request) {
