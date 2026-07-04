@@ -242,6 +242,8 @@ export interface Database {
           num_people: number | null
           tags: string[] | null
           last_activity_at: string | null
+          whatsapp_number: string | null
+          birth_date: string | null
           created_at: string
         }
         Insert: {
@@ -256,6 +258,8 @@ export interface Database {
           num_people?: number | null
           tags?: string[] | null
           last_activity_at?: string | null
+          whatsapp_number?: string | null
+          birth_date?: string | null
           created_at?: string
         }
         Update: {
@@ -270,6 +274,8 @@ export interface Database {
           num_people?: number | null
           tags?: string[] | null
           last_activity_at?: string | null
+          whatsapp_number?: string | null
+          birth_date?: string | null
           created_at?: string
         }
       }
@@ -309,6 +315,7 @@ export interface Database {
           status: string
           error: string | null
           created_at: string
+          updated_at: string | null
         }
         Insert: {
           id?: string
@@ -316,6 +323,7 @@ export interface Database {
           status?: string
           error?: string | null
           created_at?: string
+          updated_at?: string | null
         }
         Update: {
           id?: string
@@ -323,6 +331,7 @@ export interface Database {
           status?: string
           error?: string | null
           created_at?: string
+          updated_at?: string | null
         }
       }
       conversations: {
@@ -392,6 +401,96 @@ export interface Database {
           send_status?: string
           retry_count?: number
           next_retry_at?: string | null
+          created_at?: string
+        }
+      }
+      campaigns: {
+        Row: {
+          id: string
+          name: string
+          type: string
+          template_name: string
+          status: string
+          target_filters: Json | null
+          created_at: string
+          created_by: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          type: string
+          template_name: string
+          status?: string
+          target_filters?: Json | null
+          created_at?: string
+          created_by: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          type?: string
+          template_name?: string
+          status?: string
+          target_filters?: Json | null
+          created_at?: string
+          created_by?: string
+        }
+      }
+      campaign_sends: {
+        Row: {
+          id: string
+          campaign_id: string
+          prospect_id: string | null
+          phone_number: string
+          status: string
+          meta_message_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          campaign_id: string
+          prospect_id?: string | null
+          phone_number: string
+          status?: string
+          meta_message_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          campaign_id?: string
+          prospect_id?: string | null
+          phone_number?: string
+          status?: string
+          meta_message_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      satisfaction_surveys: {
+        Row: {
+          id: string
+          reservation_id: string
+          prospect_id: string
+          rating: number
+          feedback: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          reservation_id: string
+          prospect_id: string
+          rating: number
+          feedback?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          reservation_id?: string
+          prospect_id?: string
+          rating?: number
+          feedback?: string | null
           created_at?: string
         }
       }

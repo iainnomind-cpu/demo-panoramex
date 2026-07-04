@@ -4,8 +4,8 @@
 // template messages with Meta-compliant throttling (≤80 msg/s).
 // ============================================================
 
-import { adminDb } from '../bot/supabase'
-import { sendWhatsAppTemplate, sleep } from '../utils/whatsapp'
+import { adminDb } from '../bot/supabase.js'
+import { sendWhatsAppTemplate, sleep } from '../utils/whatsapp.js'
 
 interface BatchRecipient {
   phone_number: string

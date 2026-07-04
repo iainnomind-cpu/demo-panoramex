@@ -1,5 +1,5 @@
-import { adminDb } from './supabase';
-import { TourFlow, detectFlow } from './flows';
+import { adminDb } from './supabase.js';
+import { TourFlow, detectFlow } from './flows.js';
 
 export async function getOrCreateConversation(
   phone: string,

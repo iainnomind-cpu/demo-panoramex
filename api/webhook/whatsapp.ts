@@ -1,10 +1,10 @@
 import { waitUntil } from '@vercel/functions';
-import { verifyMetaSignature } from '../bot/crypto';
-import { adminDb } from '../bot/supabase';
-import { getOrCreateConversation, saveMessage, pauseConversation } from '../bot/state';
-import { generateResponse } from '../bot/llm';
-import { sendWhatsAppMessage } from '../utils/whatsapp';
-import { checkRateLimit } from '../../src/lib/rateLimit';
+import { verifyMetaSignature } from '../bot/crypto.js';
+import { adminDb } from '../bot/supabase.js';
+import { getOrCreateConversation, saveMessage, pauseConversation } from '../bot/state.js';
+import { generateResponse } from '../bot/llm.js';
+import { sendWhatsAppMessage } from '../utils/whatsapp.js';
+import { checkRateLimit } from '../../src/lib/rateLimit.js';
 
 export async function GET(req: Request) {
   const url = new URL(req.url);

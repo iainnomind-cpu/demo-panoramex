@@ -5,8 +5,8 @@
 // the birthday WhatsApp template.
 // ============================================================
 
-import { adminDb } from '../bot/supabase'
-import { sendWhatsAppTemplate } from '../utils/whatsapp'
+import { adminDb } from '../bot/supabase.js'
+import { sendWhatsAppTemplate } from '../utils/whatsapp.js'
 
 const PHONE_NUMBER_ID = process.env.META_PHONE_NUMBER_ID || ''
 const ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || ''
