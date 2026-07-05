@@ -77,6 +77,14 @@ const config: Config = {
         // Coral brand
         'coral': '#E8483A',
         'coral-hover': '#C73D30',
+        // Navy aliases (used in prose)
+        'navy': '#021848',
+        'navy-container': '#1c2e5e',
+      },
+      boxShadow: {
+        'modal': '0 20px 60px rgba(0,0,0,0.18)',
+        'card': '0 1px 2px rgba(0,0,0,0.06)',
+        'card-hover': '0 4px 12px rgba(0,0,0,0.10)',
       },
       borderRadius: {
         DEFAULT: '0.25rem',
@@ -139,6 +147,7 @@ const config: Config = {
       },
       animation: {
         'modal-enter': 'modal-enter 200ms ease-out',
+        'modal-in': 'modal-enter 200ms ease-out',
         'toast-slide': 'toast-slide 200ms ease-out',
         shimmer: 'shimmer 1.4s infinite linear',
         'pulse-once': 'pulse-once 300ms ease',

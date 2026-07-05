@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-05T01:49:00Z",
+  "title": "Design System: Panoramex CRM",
+  "extensions": {
+    "colorMeta": {
+      "navy-deep": {
+        "role": "primary",
+        "displayName": "Deep Navy",
+        "canonical": "#021848",
+        "tonalRamp": ["#000510", "#010b24", "#021848", "#0a2460", "#1c3878", "#344e90", "#5068a8", "#8097cc", "#b4c5fe", "#dbe1ff"]
+      },
+      "navy-container": {
+        "role": "primary",
+        "displayName": "Navy Container",
+        "canonical": "#1C2E5E",
+        "tonalRamp": ["#060e1e", "#0e1c3a", "#1c2e5e", "#2a4080", "#3a549e", "#5068b2", "#7088c8", "#9ab0de", "#c4d0ee", "#e4eaf8"]
+      },
+      "coral": {
+        "role": "secondary",
+        "displayName": "Coral Signal",
+        "canonical": "#E8483A",
+        "tonalRamp": ["#4a0e09", "#7a1a12", "#b02418", "#c73d30", "#e8483a", "#ef6e62", "#f59289", "#fab0aa", "#fcceca", "#fde8e7"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Off-White Canvas",
+        "canonical": "#fbf8fd",
+        "tonalRamp": ["#2d2b30", "#46444a", "#605e64", "#7a787e", "#959298", "#b0aeb4", "#cac8ce", "#dddbe1", "#efedf2", "#fbf8fd"]
+      },
+      "on-surface": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1b1b1f",
+        "tonalRamp": ["#000000", "#0c0c10", "#1b1b1f", "#303034", "#46464a", "#5c5c60", "#7a7a7e", "#9a9a9e", "#c0c0c4", "#e4e4e8"]
+      },
+      "status-qualified": {
+        "role": "tertiary",
+        "displayName": "Qualified Green",
+        "canonical": "#16A34A",
+        "tonalRamp": ["#052514", "#0a3d22", "#0f5c34", "#14804a", "#16a34a", "#22c55e", "#4ade80", "#86efac", "#bbf7d0", "#dcfce7"]
+      },
+      "status-process": {
+        "role": "tertiary",
+        "displayName": "In-Process Amber",
+        "canonical": "#D97706",
+        "tonalRamp": ["#341a00", "#5a2e00", "#8a4800", "#b86000", "#d97706", "#f59e0b", "#fbbf24", "#fcd34d", "#fde68a", "#fef3c7"]
+      },
+      "status-no-response": {
+        "role": "tertiary",
+        "displayName": "No-Response Red",
+        "canonical": "#DC2626",
+        "tonalRamp": ["#450a0a", "#7f1d1d", "#991b1b", "#b91c1c", "#dc2626", "#ef4444", "#f87171", "#fca5a5", "#fecaca", "#fee2e2"]
+      },
+      "status-confirmed": {
+        "role": "tertiary",
+        "displayName": "Confirmed Blue",
+        "canonical": "#2563EB",
+        "tonalRamp": ["#0a1e56", "#103093", "#1648cc", "#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe", "#dbeafe"]
+      },
+      "status-converted": {
+        "role": "tertiary",
+        "displayName": "Converted Teal",
+        "canonical": "#0D9488",
+        "tonalRamp": ["#022b28", "#044f4a", "#076b64", "#0a8078", "#0d9488", "#14b8a6", "#2dd4bf", "#5eead4", "#99f6e4", "#ccfbf1"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero stats and onboarding moments. Never everyday page titles." },
+      "headline": { "displayName": "Headline", "purpose": "Page headers and modal titles. One per view." },
+      "title": { "displayName": "Title", "purpose": "Section headers, card leaders, sub-section titles." },
+      "body": { "displayName": "Body", "purpose": "Primary and secondary content. Inter for legibility at data-dense sizes." },
+      "label": { "displayName": "Label Caps", "purpose": "Column headers and filter labels only. One per logical group, not one per section." },
+      "mono": { "displayName": "Mono", "purpose": "IDs, phone numbers, codes, timestamps — any value that is copied, compared, or looked up." }
+    },
+    "shadows": [
+      { "name": "card-resting", "value": "0 1px 2px rgba(0,0,0,0.06)", "purpose": "KPI cards and prospect cards at rest. Barely visible — presence without weight." },
+      { "name": "card-hover", "value": "0 4px 12px rgba(0,0,0,0.10)", "purpose": "Interactive cards on hover. The jump confirms the element is clickable." },
+      { "name": "sidebar", "value": "2px 0 8px rgba(0,0,0,0.12)", "purpose": "Structural separation of the navy sidebar from the content canvas." },
+      { "name": "modal", "value": "0 20px 60px rgba(0,0,0,0.18)", "purpose": "Full overlay dialogs. Accompanies the 200ms scale-in animation." },
+      { "name": "toast", "value": "0 4px 16px rgba(0,0,0,0.14)", "purpose": "Slide-in toast notifications from right edge." }
+    ],
+    "motion": [
+      { "name": "modal-enter", "value": "scale(0.96) translateY(8px) → scale(1) translateY(0), opacity 0→1, 200ms ease-out", "purpose": "Modal appearance. Defined as keyframe in tailwind.config.ts." },
+      { "name": "toast-slide", "value": "translateX(100%) → translateX(0), opacity 0→1, 200ms ease-out", "purpose": "Toast notification entrance from right." },
+      { "name": "shimmer", "value": "backgroundPosition -200%→200%, 1.4s infinite linear", "purpose": "Skeleton loading state for data cards." },
+      { "name": "sidebar-collapse", "value": "width transition, 250ms ease", "purpose": "Sidebar expand/collapse. Defined in .sidebar-transition utility." }
+    ],
+    "breakpoints": [
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The principal action button. Navy deep background, white text, rounded-lg. Used for navigation-level actions (Save, Submit).",
+      "html": "<button class=\"ds-btn-primary\">Guardar Cambios</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #021848; color: #ffffff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 12px; border: none; cursor: pointer; transition: background 150ms ease; } .ds-btn-primary:hover { background: #1C2E5E; } .ds-btn-primary:focus-visible { outline: 2px solid #021848; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }"
+    },
+    {
+      "name": "Secondary Button (Coral CTA)",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "The urgency CTA. Coral background for book, send, confirm actions. Use sparingly — its rarity is the point.",
+      "html": "<button class=\"ds-btn-coral\">Reservar Tour</button>",
+      "css": ".ds-btn-coral { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #E8483A; color: #ffffff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 12px; border: none; cursor: pointer; transition: background 150ms ease; } .ds-btn-coral:hover { background: #C73D30; } .ds-btn-coral:focus-visible { outline: 2px solid #E8483A; outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action adjacent to a primary button. Transparent with navy stroke.",
+      "html": "<button class=\"ds-btn-outline\">Cancelar</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: transparent; color: #021848; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 12px; border: 1px solid #757680; cursor: pointer; transition: background 150ms ease; } .ds-btn-outline:hover { background: #e4e2e6; } .ds-btn-outline:focus-visible { outline: 2px solid #021848; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Standard form input. Stroke border, navy focus ring, error state included.",
+      "html": "<div class=\"ds-input-wrap\"><label class=\"ds-input-label\" for=\"ds-demo-input\">Nombre del Prospecto</label><input class=\"ds-input\" id=\"ds-demo-input\" type=\"text\" placeholder=\"Ej: María García\" /></div>",
+      "css": ".ds-input-wrap { display: flex; flex-direction: column; gap: 4px; width: 100%; } .ds-input-label { font-family: Inter, sans-serif; font-size: 14px; font-weight: 500; color: #45464f; } .ds-input { display: block; width: 100%; background: #fbf8fd; color: #1b1b1f; font-family: Inter, sans-serif; font-size: 14px; padding: 8px 12px; border-radius: 8px; border: 1px solid #c5c6d0; outline: none; box-sizing: border-box; transition: border-color 150ms ease, box-shadow 150ms ease; } .ds-input::placeholder { color: #757680; } .ds-input:focus { border-color: #021848; box-shadow: 0 0 0 1px #021848; }"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "description": "Prospect lifecycle status indicator. Six fixed variants — never use outside this context.",
+      "html": "<span class=\"ds-badge ds-badge--qualified\"><span class=\"ds-badge-dot\"></span>Calificado</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 600; border: 1px solid; } .ds-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; } .ds-badge--qualified { background: #dcfce7; color: #16A34A; border-color: #86efac; } .ds-badge--process { background: #fef3c7; color: #D97706; border-color: #fcd34d; } .ds-badge--no-response { background: #fee2e2; color: #DC2626; border-color: #fca5a5; } .ds-badge--new { background: #f3f4f6; color: #6B7280; border-color: #d1d5db; } .ds-badge--confirmed { background: #dbeafe; color: #2563EB; border-color: #93c5fd; } .ds-badge--converted { background: #ccfbf1; color: #0D9488; border-color: #5eead4; }"
+    },
+    {
+      "name": "KPI Card",
+      "kind": "card",
+      "description": "The primary metric surface on the Dashboard. White card on off-white canvas, icon container, trend indicator, large value.",
+      "html": "<div class=\"ds-kpi-card\"><div class=\"ds-kpi-header\"><div class=\"ds-kpi-icon ds-kpi-icon--blue\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z\"/></svg></div><span class=\"ds-kpi-trend ds-kpi-trend--up\">+12%</span></div><p class=\"ds-kpi-title\">Leads Hoy</p><div class=\"ds-kpi-value\">24</div><p class=\"ds-kpi-subtitle\">Nuevos contactos</p></div>",
+      "css": ".ds-kpi-card { background: #ffffff; padding: 20px; border-radius: 16px; border: 1px solid #e9e7ec; box-shadow: 0 1px 2px rgba(0,0,0,0.06); transition: box-shadow 200ms ease; } .ds-kpi-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.10); } .ds-kpi-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; } .ds-kpi-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; } .ds-kpi-icon--blue { background: #eff6ff; color: #2563eb; } .ds-kpi-icon--emerald { background: #f0fdf4; color: #16a34a; } .ds-kpi-icon--amber { background: #fffbeb; color: #d97706; } .ds-kpi-icon--indigo { background: #eef2ff; color: #4f46e5; } .ds-kpi-trend { font-family: Inter, sans-serif; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 2px; } .ds-kpi-trend--up { color: #16a34a; } .ds-kpi-trend--down { color: #dc2626; } .ds-kpi-trend--flat { color: #6b7280; } .ds-kpi-title { font-family: Inter, sans-serif; font-size: 12px; font-weight: 500; color: #6b7280; margin: 0 0 4px; } .ds-kpi-value { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 30px; font-weight: 700; color: #1b1b1f; letter-spacing: -0.02em; line-height: 1.2; } .ds-kpi-subtitle { font-family: Inter, sans-serif; font-size: 11px; color: #9ca3af; margin: 4px 0 0; }"
+    },
+    {
+      "name": "Sidebar Nav Item",
+      "kind": "nav",
+      "description": "Navigation item in the deep navy sidebar. Active state shows coral text on navy-container background.",
+      "html": "<nav class=\"ds-sidebar\"><a href=\"#\" class=\"ds-nav-item ds-nav-item--active\"><svg class=\"ds-nav-icon\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z\"/></svg>Dashboard</a><a href=\"#\" class=\"ds-nav-item\"><svg class=\"ds-nav-icon\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z\"/></svg>Conversaciones</a></nav>",
+      "css": ".ds-sidebar { background: #021848; padding: 12px; display: flex; flex-direction: column; gap: 4px; } .ds-nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 500; color: #8697cd; text-decoration: none; transition: background 150ms ease, color 150ms ease; } .ds-nav-item:hover { background: #1c2e5e; color: #ffffff; } .ds-nav-item--active { background: #1c2e5e; color: #E8483A; box-shadow: 0 1px 2px rgba(0,0,0,0.2); } .ds-nav-icon { width: 20px; height: 20px; flex-shrink: 0; }"
+    },
+    {
+      "name": "Search Input (TopBar)",
+      "kind": "input",
+      "description": "Global search in the TopBar. Pill shape (rounded-full) distinguishes it from form inputs. The only pill input in the system.",
+      "html": "<div class=\"ds-search\"><svg class=\"ds-search-icon\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z\"/></svg><input class=\"ds-search-input\" type=\"text\" placeholder=\"Buscar...\" /></div>",
+      "css": ".ds-search { position: relative; display: inline-flex; align-items: center; } .ds-search-icon { position: absolute; left: 12px; width: 20px; height: 20px; color: #757680; pointer-events: none; } .ds-search-input { width: 256px; padding: 8px 16px 8px 40px; border-radius: 9999px; border: 1px solid #c5c6d0; background: #fbf8fd; font-family: Inter, sans-serif; font-size: 14px; color: #1b1b1f; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; } .ds-search-input::placeholder { color: #757680; } .ds-search-input:focus { border-color: #021848; box-shadow: 0 0 0 1px #021848; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Navigator's Command Center",
+    "overview": "Panoramex CRM is a precision instrument — not a generic productivity tool. Every surface exists to help a sales agent navigate a prospect from first contact to confirmed booking with zero wasted motion. The aesthetic reflects the seriousness of that mission: deep navy that communicates authority and focus, coral that fires only as a decisive action signal, and a clean light canvas that lets data breathe without ever feeling airy or casual.\n\nThe system favors clarity over cleverness. Charts are legible at a glance. Status badges are unmistakably color-coded. Navigation is immediate and predictable. The design earns trust by staying out of the agent's way — a good session ends with bookings closed, not with the agent remembering UI.\n\nThis system explicitly rejects the generic Bootstrap/Material template feel. No default blue-button-on-white patterns, no placeholder icon libraries, no lorem-ipsum card grids. Every component is intentional, every state is handled, and every data point has a clear visual hierarchy.",
+    "keyCharacteristics": [
+      "Deep navy sidebar as an anchor — the always-present north star of the layout",
+      "Coral as a precision action color — reserved for CTAs and live status indicators only",
+      "Status semaphore system — six semantic colors that agents read in under a second",
+      "Light, structured canvas — surface variants provide depth without shadows",
+      "Inter for data, Plus Jakarta Sans for identity — two voices, one system"
+    ],
+    "rules": [
+      { "name": "The Coral Scarcity Rule", "body": "Coral appears on ≤10% of any given screen. Its rarity is the point — when agents see coral, they know something needs their action. Using coral as a decorative color drains that signal.", "section": "colors" },
+      { "name": "The Semaphore Purity Rule", "body": "The six status colors are never used outside their status context. Do not use #16A34A (Qualified Green) on a chart line or a decorative accent. The moment a status color appears for decoration, the whole semaphore degrades.", "section": "colors" },
+      { "name": "The Mono Precision Rule", "body": "Any value that is looked up, copied, or compared — IDs, phone numbers, confirmation codes, currency amounts in data cells — uses JetBrains Mono. The monospace baseline alignment makes scanning a column of numbers immediate.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. A shadow on a non-interactive element is a lie — it implies the element is clickable. If it isn't, remove the shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use the tonal surface ramp (surface → surface-container-low → white) to express depth. No fabricated shadows on static containers.",
+      "Do use JetBrains Mono for any value that gets copied, compared, or looked up — phone numbers, booking IDs, monetary amounts in data tables.",
+      "Do reserve coral exclusively for call-to-action buttons and status signals. If something is coral, it is asking for action.",
+      "Do use rounded-lg (12px) on buttons and rounded-xl (16px) on cards consistently across views.",
+      "Do animate modals with scale(0.96) → scale(1) plus fade at 200ms ease-out.",
+      "Do always respect @media (prefers-reduced-motion: reduce).",
+      "Do use Plus Jakarta Sans for headings and UI labels; Inter for body, table data, and form content."
+    ],
+    "donts": [
+      "Don't use a generic Bootstrap/Material template aesthetic — plain blue primary buttons, default gray cards, iconography with no brand personality.",
+      "Don't use coral (#E8483A) for decorative purposes — graph lines, hover highlights, background tints. Coral is a scarcity signal.",
+      "Don't use any semaphore status color outside their designated lifecycle status role.",
+      "Don't exceed rounded-2xl (24px) on any component. Cards top out at rounded-xl (16px).",
+      "Don't pair border: 1px solid with a wide box-shadow (blur ≥ 16px) on the same element. Choose one.",
+      "Don't use gradient text (background-clip: text with gradient). Use solid color with weight or size for emphasis.",
+      "Don't use repeating-linear-gradient stripe backgrounds or decorative grid overlays.",
+      "Don't add tiny uppercase tracked eyebrows above every section. label-caps is for column headers and filter labels only.",
+      "Don't use border-left or border-right greater than 1px as a colored accent stripe on cards or list items."
+    ]
+  }
+}

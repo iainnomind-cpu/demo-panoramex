@@ -25,13 +25,18 @@ export const TopBar: React.FC = () => {
           <input
             type="text"
             placeholder="Buscar..."
-            className="block w-64 rounded-full border border-outline-variant bg-surface py-2 pl-10 pr-4 text-sm placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+            disabled
+            title="Búsqueda global próximamente"
+            className="block w-64 rounded-full border border-outline-variant bg-surface py-2 pl-10 pr-4 text-sm placeholder:text-outline focus:outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-surface-container"
           />
         </div>
 
-        <button className="relative text-on-surface-variant hover:text-primary transition-colors focus:outline-none">
+        {/* Notification bell — dot removed until notification panel is implemented */}
+        <button
+          aria-label="Notificaciones"
+          className="relative text-on-surface-variant hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-md"
+        >
           <span className="material-symbols-outlined">notifications</span>
-          <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-coral ring-2 ring-surface-container-lowest"></span>
         </button>
 
         <div className="flex items-center gap-3 border-l border-outline-variant pl-6">

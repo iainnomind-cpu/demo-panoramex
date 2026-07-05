@@ -16,15 +16,13 @@ export function SalesFunnel({ data }: SalesFunnelProps) {
   }))
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm h-full flex flex-col">
+    <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm h-full flex flex-col">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-base font-semibold text-gray-900">Embudo de Ventas</h3>
-          <p className="text-xs text-gray-500 mt-0.5">Prospectos por etapa en tiempo real</p>
+          <h3 className="text-base font-semibold text-on-surface">Embudo de Ventas</h3>
+          <p className="text-xs text-on-surface-variant mt-0.5">Prospectos por etapa</p>
         </div>
-        <button className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors">
-          <span className="material-symbols-outlined text-gray-400 text-xl">filter_alt</span>
-        </button>
+        {/* Filter button removed — feature not yet implemented; dead controls destroy trust */}
       </div>
 
       <div className="flex-1 min-h-[280px]">
@@ -34,25 +32,27 @@ export function SalesFunnel({ data }: SalesFunnelProps) {
             layout="vertical"
             margin={{ top: 0, right: 20, left: 10, bottom: 0 }}
           >
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f3f4f6" />
-            <XAxis type="number" stroke="#9ca3af" fontSize={11} tickLine={false} axisLine={false} />
-            <YAxis 
-              type="category" 
-              dataKey="name" 
-              stroke="#6b7280" 
-              fontSize={12} 
+            {/* Stroke values reference DESIGN.md outline-variant (#c5c6d0) and surface-container (#efedf2) */}
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#efedf2" />
+            <XAxis type="number" stroke="#c5c6d0" fontSize={11} tickLine={false} axisLine={false} />
+            <YAxis
+              type="category"
+              dataKey="name"
+              stroke="#c5c6d0"
+              fontSize={12}
               width={110}
               tickLine={false}
               axisLine={false}
-              tick={{ fill: '#374151', fontWeight: 500 }}
+              tick={{ fill: '#45464f', fontWeight: 500 }}
             />
             <Tooltip
-              cursor={{ fill: '#f9fafb' }}
-              contentStyle={{ 
-                borderRadius: '10px', 
-                border: '1px solid #e5e7eb', 
-                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.07)',
-                fontSize: '13px'
+              cursor={{ fill: '#f5f3f8' }}
+              contentStyle={{
+                borderRadius: '12px',
+                border: '1px solid #c5c6d0',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                fontSize: '13px',
+                background: '#ffffff',
               }}
             />
             <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={28}>

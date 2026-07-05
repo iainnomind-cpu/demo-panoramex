@@ -58,7 +58,7 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
               <div>
                 <p className="text-xs text-on-surface-variant mb-1">Tour de Interés</p>
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-coral text-lg">map</span>
+                  <span className="material-symbols-outlined text-outline text-lg" aria-hidden="true">map</span>
                   <span className="text-sm font-medium">{tour?.name || 'General'}</span>
                 </div>
               </div>
@@ -109,11 +109,11 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
             <h4 className="text-sm font-semibold text-on-surface uppercase tracking-wider mb-4 border-b border-outline-variant pb-2">Línea de Tiempo</h4>
             
             <div className="flex-1 overflow-auto pr-2 space-y-4">
-              {/* Fake timeline items based on actual data */}
+              {/* Event derived from created_at date */}
               <div className="relative pl-6 border-l-2 border-surface-variant">
-                <div className="absolute w-3 h-3 bg-white border-2 border-primary rounded-full -left-[7px] top-1"></div>
+                <div className="absolute w-3 h-3 bg-surface-container-lowest border-2 border-primary rounded-full -left-[7px] top-1"></div>
                 <p className="text-xs text-on-surface-variant mb-1">{format(new Date(prospect.created_at), 'd MMM yyyy, HH:mm', { locale: es })}</p>
-                <p className="text-sm text-on-surface font-medium">Prospecto creado en sistema</p>
+                <p className="text-sm text-on-surface font-medium">Registro inicial en CRM</p>
                 <p className="text-xs text-on-surface-variant mt-1">Origen: {prospect.origin_channel}</p>
               </div>
 

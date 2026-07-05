@@ -27,25 +27,25 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({ status, prospects, o
 
   return (
     <div 
-      className="flex flex-col min-w-[320px] max-w-[320px] max-h-full rounded-xl overflow-hidden shadow-sm border border-gray-200"
-      style={{ backgroundColor: statusConfig.bg }}
+      className="flex flex-col min-w-[320px] max-w-[320px] max-h-full rounded-xl overflow-hidden border border-outline-variant/50 bg-surface-container-lowest/50 backdrop-blur-sm"
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
       {/* Header */}
-      <div className="p-4 flex items-center justify-between border-b border-white/40 shadow-sm" style={{ backgroundColor: `${statusConfig.border}15` }}>
+      <div className="p-4 flex items-center justify-between border-b border-outline-variant/50 bg-surface-container-lowest">
         <div className="flex items-center gap-2">
           <span 
-            className="material-symbols-outlined text-[20px]"
+            className="material-symbols-outlined text-[18px]"
             style={{ color: statusConfig.color }}
+            aria-hidden="true"
           >
             {statusConfig.icon}
           </span>
-          <h3 className="font-bold text-sm tracking-wider" style={{ color: statusConfig.color }}>
+          <h3 className="font-bold text-sm tracking-wide text-on-surface uppercase">
             {statusConfig.label}
           </h3>
         </div>
-        <span className="flex items-center justify-center bg-white text-xs font-bold rounded-full w-7 h-7 shadow-sm text-gray-700">
+        <span className="flex items-center justify-center bg-surface-container-high text-xs font-bold rounded-full w-7 h-7 text-on-surface-variant">
           {prospects.length}
         </span>
       </div>
@@ -61,10 +61,10 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({ status, prospects, o
         ))}
         {prospects.length === 0 && (
           <div className="flex flex-col items-center justify-center py-10 opacity-60">
-             <span className="material-symbols-outlined text-4xl mb-2" style={{ color: statusConfig.color }}>
+             <span className="material-symbols-outlined text-4xl mb-2 text-outline" aria-hidden="true">
                {statusConfig.icon}
              </span>
-             <p className="text-sm font-medium" style={{ color: statusConfig.color }}>
+             <p className="text-sm font-medium text-on-surface-variant">
                Sin prospectos
              </p>
           </div>

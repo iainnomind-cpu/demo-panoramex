@@ -2,6 +2,9 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Prospect, STATUS_CONFIG, CHANNEL_CONFIG, ProspectStatus, Channel } from '../../types'
 import { useAppStore } from '../../store/useAppStore'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
+import { Button } from '../ui/Button'
 
 interface ProspectCardProps {
   prospect: Prospect
@@ -18,17 +21,8 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
   const agent = agents.find((a) => a.id === prospect.assigned_to)
 
   const dateStr = prospect.desired_date
-    ? new Date(prospect.desired_date).toLocaleDateString('es-MX', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      })
+    ? format(new Date(prospect.desired_date), 'd MMM yyyy', { locale: es })
     : 'Sin fecha'
-
-  const handleConvert = () => {
-    // Simulated toast for now
-    alert(`Convertir: ${prospect.name}`)
-  }
 
   return (
     <div
@@ -36,21 +30,22 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
       onDragStart={(e) => {
         e.dataTransfer.setData('prospect_id', prospect.id)
       }}
-      className="bg-white rounded-lg p-4 flex flex-col gap-3 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing border-y border-r border-gray-200"
-      style={{ borderLeft: `4px solid ${statusConfig.border}` }}
+      className="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing border border-outline-variant"
     >
       <div className="flex justify-between items-start gap-2">
         <div className="flex-1 min-w-0">
           <button 
-            className="font-semibold text-gray-900 truncate hover:text-blue-600 transition-colors text-left"
+            className="font-semibold text-on-surface font-sans truncate hover:text-primary transition-colors text-left max-w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
             onClick={() => onProspectClick && onProspectClick(prospect.id)}
+            title={prospect.name}
           >
             {prospect.name}
           </button>
-          <p className="text-sm text-gray-500 font-mono mt-0.5 flex items-center gap-1">
+          <p className="text-sm text-on-surface-variant font-mono mt-0.5 flex items-center gap-1">
             <span
               className="material-symbols-outlined text-[16px]"
-              style={{ color: channelConfig?.color || '#000' }}
+              style={{ color: channelConfig?.color || 'inherit' }}
+              aria-hidden="true"
             >
               {channelConfig?.icon || 'help'}
             </span>
@@ -59,9 +54,9 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
         </div>
         {agent && (
           <div
-            className="w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center text-xs font-medium text-white shadow-sm"
-            style={{ backgroundColor: agent.color || '#3B82F6' }}
-            title={agent.full_name}
+            className="w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm"
+            style={{ backgroundColor: agent.color || 'var(--color-primary)' }}
+            title={`Asignado a: ${agent.full_name}`}
           >
             {agent.full_name?.substring(0, 2).toUpperCase() || 'AG'}
           </div>
@@ -70,40 +65,44 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
 
       <div className="flex flex-wrap gap-2">
         {tour && (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-700 max-w-full">
+          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-surface-container text-on-surface-variant max-w-full">
             <span className="material-symbols-outlined text-[14px]">map</span>
             <span className="truncate">{tour.name}</span>
           </span>
         )}
       </div>
 
-      <div className="flex items-center gap-4 text-xs text-gray-600 mt-1">
-        <div className="flex items-center gap-1">
+      <div className="flex items-center gap-4 text-xs text-on-surface-variant mt-1">
+        <div className="flex items-center gap-1 truncate">
           <span className="material-symbols-outlined text-[16px]">calendar_today</span>
           {dateStr}
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 whitespace-nowrap">
           <span className="material-symbols-outlined text-[16px]">group</span>
           {prospect.num_people || 1} pax
         </div>
       </div>
 
-      {/* Action buttons */}
-      <div className="flex items-center gap-2 mt-2 pt-3 border-t border-gray-100">
-        <button
+      {/* Action buttons - Replaced generic HTML buttons and fake alert with proper UI components */}
+      <div className="flex items-center gap-2 mt-2 pt-3 border-t border-outline-variant/50">
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex-1"
+          leftIcon="chat"
           onClick={() => navigate(`/conversaciones?id=${prospect.id}`)}
-          className="flex-1 flex items-center justify-center gap-1 py-1.5 px-3 rounded-md text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors"
         >
-          <span className="material-symbols-outlined text-[18px]">chat</span>
-          Abrir Chat
-        </button>
-        <button
-          onClick={handleConvert}
-          className="flex-1 flex items-center justify-center gap-1 py-1.5 px-3 rounded-md text-sm font-medium text-teal-600 bg-teal-50 hover:bg-teal-100 transition-colors"
+          Chat
+        </Button>
+        <Button
+          variant="secondary"
+          size="sm"
+          className="flex-1"
+          leftIcon="visibility"
+          onClick={() => onProspectClick && onProspectClick(prospect.id)}
         >
-          <span className="material-symbols-outlined text-[18px]">check_circle</span>
-          Convertir
-        </button>
+          Detalles
+        </Button>
       </div>
     </div>
   )
