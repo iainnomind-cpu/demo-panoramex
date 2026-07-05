@@ -67,11 +67,11 @@ export const useAnalyticsStore = create<AnalyticsState>((set) => ({
       ])
 
       set({
-        kpis: (kpisData as unknown) as AnalyticsKPIs,
-        funnel: (funnelData as unknown) as FunnelData[],
-        botPerformance: (botData as unknown) as BotPerformance,
-        surveyAggregates: (surveyData as unknown) as SurveyAggregates,
-        metaConsumption: (metaData as unknown) as MetaConsumption,
+        kpis: ((kpisData || null) as unknown) as AnalyticsKPIs,
+        funnel: ((funnelData || []) as unknown) as FunnelData[],
+        botPerformance: ((botData || null) as unknown) as BotPerformance,
+        surveyAggregates: ((surveyData || null) as unknown) as SurveyAggregates,
+        metaConsumption: ((metaData || null) as unknown) as MetaConsumption,
         conversionByTour: (tourData || []) as unknown as ConversionByTour[],
         conversionByChannel: (channelData || []) as unknown as ConversionByChannel[],
         agentPerformance: (agentData || []) as unknown as AgentPerformance[],

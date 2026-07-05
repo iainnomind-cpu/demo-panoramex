@@ -62,7 +62,7 @@ async function fetchAndSetAgent(userId: string): Promise<void> {
     .from('agents')
     .select('*')
     .eq('id', userId)
-    .single()
+    .maybeSingle()
 
   if (error) {
     console.error('[AuthStore] Failed to fetch agent profile:', error.message)
