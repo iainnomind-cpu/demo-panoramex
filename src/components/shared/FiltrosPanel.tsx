@@ -103,20 +103,16 @@ export const FiltrosPanel: React.FC<FiltrosPanelProps> = ({
               </span>
             )}
           </div>
-          <button
-            onClick={onClose}
-            aria-label="Cerrar filtros"
-            className="w-8 h-8 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <span className="material-symbols-outlined text-[20px]">close</span>
-          </button>
+          <Button variant="ghost" size="sm" onClick={onClose}>
+            Cerrar
+          </Button>
         </div>
 
         {/* Scrollable body */}
         <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-6">
           {/* Status */}
           <section>
-            <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">
+            <p className="text-sm font-semibold text-on-surface mb-3">
               Estado
             </p>
             <div className="flex flex-col gap-1.5">
@@ -155,7 +151,7 @@ export const FiltrosPanel: React.FC<FiltrosPanelProps> = ({
 
           {/* Canal */}
           <section>
-            <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">
+            <p className="text-sm font-semibold text-on-surface mb-3">
               Canal de origen
             </p>
             <div className="flex flex-wrap gap-2">
@@ -190,7 +186,7 @@ export const FiltrosPanel: React.FC<FiltrosPanelProps> = ({
           {/* Tour */}
           {availableTours.length > 0 && (
             <section>
-              <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">
+              <p className="text-sm font-semibold text-on-surface mb-3">
                 Tour de interés
               </p>
               <select
@@ -211,7 +207,7 @@ export const FiltrosPanel: React.FC<FiltrosPanelProps> = ({
           {/* Asignado a */}
           {availableAgents.length > 0 && (
             <section>
-              <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">
+              <p className="text-sm font-semibold text-on-surface mb-3">
                 Asignado a
               </p>
               <select
@@ -231,7 +227,7 @@ export const FiltrosPanel: React.FC<FiltrosPanelProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between gap-3 px-5 py-4 border-t border-outline-variant flex-shrink-0">
+        <div className="flex items-center justify-center px-5 py-4 border-t border-outline-variant flex-shrink-0">
           <button
             type="button"
             onClick={onReset}
@@ -240,9 +236,6 @@ export const FiltrosPanel: React.FC<FiltrosPanelProps> = ({
           >
             Limpiar filtros
           </button>
-          <Button variant="primary" onClick={onClose} size="sm">
-            Aplicar
-          </Button>
         </div>
       </div>
     </>

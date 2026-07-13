@@ -27,7 +27,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({ status, prospects, o
 
   return (
     <div 
-      className="flex flex-col min-w-[320px] max-w-[320px] max-h-full rounded-xl overflow-hidden border border-outline-variant/50 bg-surface-container-lowest/50 backdrop-blur-sm"
+      className="flex flex-col min-w-[320px] max-w-[320px] max-h-full rounded-xl overflow-hidden border border-outline-variant/50 bg-surface-container-lowest"
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
@@ -41,7 +41,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({ status, prospects, o
           >
             {statusConfig.icon}
           </span>
-          <h3 className="font-bold text-sm tracking-wide text-on-surface uppercase">
+          <h3 className="font-bold text-sm text-on-surface">
             {statusConfig.label}
           </h3>
         </div>

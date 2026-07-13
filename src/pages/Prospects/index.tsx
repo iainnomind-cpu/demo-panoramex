@@ -66,7 +66,7 @@ export const Prospects: React.FC = () => {
       {/* Top Bar */}
       <div className="px-6 py-5 border-b border-outline-variant flex items-center justify-between bg-surface-container-lowest z-30 shadow-sm">
         <div>
-          <h1 className="text-2xl font-bold text-navy">Prospectos (CRM)</h1>
+          <h1 className="text-2xl font-bold text-navy">Prospectos</h1>
           <p className="text-sm text-on-surface-variant mt-1">
             Gestiona y da seguimiento a tus prospectos en el embudo de ventas.
           </p>

@@ -108,30 +108,76 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
           <div className="flex-1 bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
             <h4 className="text-sm font-semibold text-on-surface uppercase tracking-wider mb-4 border-b border-outline-variant pb-2">Línea de Tiempo</h4>
             
-            <div className="flex-1 overflow-auto pr-2 space-y-4">
+            <div className="flex-1 overflow-auto pr-3 flex flex-col">
               {/* Event derived from created_at date */}
-              <div className="relative pl-6 border-l-2 border-surface-variant">
-                <div className="absolute w-3 h-3 bg-surface-container-lowest border-2 border-primary rounded-full -left-[7px] top-1"></div>
-                <p className="text-xs text-on-surface-variant mb-1">{format(new Date(prospect.created_at), 'd MMM yyyy, HH:mm', { locale: es })}</p>
-                <p className="text-sm text-on-surface font-medium">Registro inicial en CRM</p>
-                <p className="text-xs text-on-surface-variant mt-1">Origen: {prospect.origin_channel}</p>
+              <div className="relative pl-8 pb-6 border-l-2 border-outline-variant/40 last:border-transparent last:pb-0">
+                <div className="absolute w-7 h-7 rounded-full -left-[15px] top-0 flex items-center justify-center bg-surface-container-low border-4 border-surface-container-lowest text-primary">
+                  <span className="material-symbols-outlined text-[14px]">person_add</span>
+                </div>
+                <div className="flex flex-col gap-0.5 pt-0.5">
+                  <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
+                    {format(new Date(prospect.created_at), 'd MMM yyyy, HH:mm', { locale: es })}
+                  </span>
+                  <p className="text-sm text-on-surface font-semibold mt-1">Registro inicial en CRM</p>
+                  <p className="text-xs text-on-surface-variant">Origen: <span className="capitalize font-medium">{prospect.origin_channel}</span></p>
+                </div>
               </div>
 
-              {conversation?.mensajes.map((msg, idx) => (
-                <div key={idx} className="relative pl-6 border-l-2 border-surface-variant">
-                  <div className={`absolute w-3 h-3 bg-white border-2 rounded-full -left-[7px] top-1 ${msg.tipo === 'entrante' ? 'border-coral' : msg.tipo === 'evento' ? 'border-gray-400' : 'border-green-500'}`}></div>
-                  <p className="text-xs text-on-surface-variant mb-1">{format(new Date(msg.timestamp), 'd MMM yyyy, HH:mm', { locale: es })}</p>
-                  <p className="text-sm text-on-surface">
-                    {msg.tipo === 'entrante' && <span className="font-semibold">Mensaje Entrante: </span>}
-                    {msg.tipo === 'saliente' && <span className="font-semibold text-green-600">Respuesta: </span>}
-                    {msg.tipo === 'evento' && <span className="italic text-gray-500">Evento: </span>}
-                    {msg.contenido}
-                  </p>
-                </div>
-              ))}
+              {conversation?.mensajes.map((msg, idx) => {
+                const isIncoming = msg.tipo === 'entrante';
+                const isOutgoing = msg.tipo === 'saliente';
+                
+                let icon = 'info';
+                let iconColorClass = 'text-on-surface-variant';
+                let labelClass = 'text-on-surface-variant';
+                let bubbleClass = 'bg-surface-container-low border-outline-variant/30 text-on-surface';
+                
+                if (isIncoming) {
+                  icon = 'forum';
+                  iconColorClass = 'text-coral';
+                  labelClass = 'text-coral font-bold';
+                  bubbleClass = 'bg-white border-coral/20 text-on-surface shadow-sm';
+                } else if (isOutgoing) {
+                  icon = 'send';
+                  iconColorClass = 'text-status-qualified';
+                  labelClass = 'text-status-qualified font-bold';
+                  bubbleClass = 'bg-surface-container-lowest border-status-qualified/20 text-on-surface shadow-sm';
+                }
+
+                return (
+                  <div key={idx} className="relative pl-8 pb-6 border-l-2 border-outline-variant/40 last:border-transparent last:pb-0 group">
+                    <div className={`absolute w-7 h-7 rounded-full -left-[15px] top-0 flex items-center justify-center bg-surface-container-low border-4 border-surface-container-lowest transition-colors ${iconColorClass} group-hover:bg-surface-variant`}>
+                      <span className="material-symbols-outlined text-[14px]">{icon}</span>
+                    </div>
+                    <div className="flex flex-col gap-1 pt-0.5">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
+                          {format(new Date(msg.timestamp), 'd MMM yyyy, HH:mm', { locale: es })}
+                        </span>
+                        <span className={`text-[10px] uppercase tracking-wider ${labelClass}`}>
+                          {msg.tipo}
+                        </span>
+                      </div>
+                      
+                      {msg.tipo === 'evento' ? (
+                        <p className="text-sm text-on-surface-variant italic mt-1">
+                          {msg.contenido}
+                        </p>
+                      ) : (
+                        <div className={`text-sm p-3 rounded-xl rounded-tl-sm border mt-1.5 ${bubbleClass}`}>
+                          {msg.contenido}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
               
               {(!conversation || conversation.mensajes.length === 0) && (
-                <div className="text-sm text-gray-400 italic py-4">No hay historial de conversación registrado.</div>
+                <div className="text-sm text-on-surface-variant italic py-6 flex flex-col items-center gap-2 opacity-60">
+                  <span className="material-symbols-outlined text-[32px] font-light">history</span>
+                  Sin historial de conversación.
+                </div>
               )}
             </div>
           </div>

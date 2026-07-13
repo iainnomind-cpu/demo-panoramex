@@ -6,7 +6,9 @@
  * allows authenticated agents to insert; no service-role key needed.
  *
  * Fields: name, phone, tour_of_interest, desired_date, num_people,
- * origin_channel, assigned_to (defaults to current agent).
+ * origin_channel, assigned_to (admins only — non-admins are silently
+ * assigned to themselves both on the frontend and enforced via a
+ * BEFORE INSERT trigger on the backend).
  */
 
 import React, { useEffect, useRef, useState } from 'react'
@@ -41,10 +43,11 @@ const INITIAL_FORM: FormState = {
   assigned_to: '',
 }
 
-/** Fetch agents list for the assigned_to dropdown */
-function useAgents() {
+/** Fetch agents list for the assigned_to dropdown (admin-only) */
+function useAgents(enabled: boolean) {
   return useQuery({
     queryKey: ['agents'],
+    enabled,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('agents')
@@ -81,7 +84,11 @@ export const NuevoProspectoModal: React.FC<NuevoProspectoModalProps> = ({
   const dialogRef = useRef<HTMLDialogElement>(null)
   const firstInputRef = useRef<HTMLInputElement>(null)
 
-  const { data: agents = [] } = useAgents()
+  // Role gate: only admins may assign a prospect to another agent.
+  // Derived synchronously from the already-loaded authStore — no extra fetch.
+  const isAdmin = agent?.role === 'admin'
+
+  const { data: agents = [] } = useAgents(isAdmin)
   const { data: tours = [] } = useTours()
 
   const [form, setForm] = useState<FormState>({
@@ -130,6 +137,13 @@ export const NuevoProspectoModal: React.FC<NuevoProspectoModalProps> = ({
 
   const { mutate: createProspect, isPending } = useMutation({
     mutationFn: async (payload: typeof form) => {
+      // Non-admins: always assign to self, regardless of form state.
+      // This mirrors the BEFORE INSERT trigger (00009_prospect_insert_assignment_guard.sql)
+      // which raises an exception if a non-admin supplies a different UID.
+      const effectiveAssignedTo = isAdmin
+        ? (payload.assigned_to || null)
+        : (agent?.id ?? null)
+
       const insertData = {
         name: payload.name.trim(),
         phone: payload.phone.trim(),
@@ -137,7 +151,7 @@ export const NuevoProspectoModal: React.FC<NuevoProspectoModalProps> = ({
         desired_date: payload.desired_date || null,
         num_people: parseInt(payload.num_people, 10) || 1,
         origin_channel: payload.origin_channel || null,
-        assigned_to: payload.assigned_to || null,
+        assigned_to: effectiveAssignedTo,
         status: 'nuevo',
         last_activity_at: new Date().toISOString(),
       }
@@ -364,7 +378,8 @@ export const NuevoProspectoModal: React.FC<NuevoProspectoModalProps> = ({
           </div>
 
           {/* Fecha deseada + Asignado a */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Grid is 2-col for admins (date + agent), full-width for agents (date only) */}
+          <div className={`grid grid-cols-1 gap-4 ${isAdmin ? 'sm:grid-cols-2' : ''}`}>
             <div>
               <label
                 htmlFor="np-date"
@@ -380,30 +395,33 @@ export const NuevoProspectoModal: React.FC<NuevoProspectoModalProps> = ({
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="np-agent"
-                className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1.5"
-              >
-                Asignado a
-              </label>
-              <select
-                id="np-agent"
-                className={inputClass()}
-                value={form.assigned_to}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, assigned_to: e.target.value }))
-                }
-              >
-                <option value="">— Sin asignar —</option>
-                {agents.map((a) => (
-                  <option key={a.id} value={a.id}>
-                    {a.full_name}
-                    {a.id === agent?.id ? ' (Tú)' : ''}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Asignado a — only visible to admins */}
+            {isAdmin && (
+              <div>
+                <label
+                  htmlFor="np-agent"
+                  className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1.5"
+                >
+                  Asignado a
+                </label>
+                <select
+                  id="np-agent"
+                  className={inputClass()}
+                  value={form.assigned_to}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, assigned_to: e.target.value }))
+                  }
+                >
+                  <option value="">— Sin asignar —</option>
+                  {agents.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.full_name}
+                      {a.id === agent?.id ? ' (Tú)' : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
 
           {/* Server-level error */}

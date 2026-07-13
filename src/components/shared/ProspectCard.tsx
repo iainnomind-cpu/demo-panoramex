@@ -1,10 +1,9 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+
 import { Prospect, STATUS_CONFIG, CHANNEL_CONFIG, ProspectStatus, Channel } from '../../types'
 import { useAppStore } from '../../store/useAppStore'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { Button } from '../ui/Button'
 
 interface ProspectCardProps {
   prospect: Prospect
@@ -12,7 +11,6 @@ interface ProspectCardProps {
 }
 
 export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspectClick }) => {
-  const navigate = useNavigate()
   const { agents, tours } = useAppStore()
 
   const statusConfig = STATUS_CONFIG[prospect.status as ProspectStatus]
@@ -30,17 +28,17 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
       onDragStart={(e) => {
         e.dataTransfer.setData('prospect_id', prospect.id)
       }}
-      className="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing border border-outline-variant"
+      onClick={() => onProspectClick && onProspectClick(prospect.id)}
+      className="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow hover:border-primary/30 cursor-pointer border border-outline-variant group"
     >
       <div className="flex justify-between items-start gap-2">
         <div className="flex-1 min-w-0">
-          <button 
-            className="font-semibold text-on-surface font-sans truncate hover:text-primary transition-colors text-left max-w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
-            onClick={() => onProspectClick && onProspectClick(prospect.id)}
+          <h4 
+            className="font-semibold text-on-surface font-sans truncate group-hover:text-primary transition-colors text-left max-w-full"
             title={prospect.name}
           >
             {prospect.name}
-          </button>
+          </h4>
           <p className="text-sm text-on-surface-variant font-mono mt-0.5 flex items-center gap-1">
             <span
               className="material-symbols-outlined text-[16px]"
@@ -83,27 +81,6 @@ export const ProspectCard: React.FC<ProspectCardProps> = ({ prospect, onProspect
         </div>
       </div>
 
-      {/* Action buttons - Replaced generic HTML buttons and fake alert with proper UI components */}
-      <div className="flex items-center gap-2 mt-2 pt-3 border-t border-outline-variant/50">
-        <Button
-          variant="outline"
-          size="sm"
-          className="flex-1"
-          leftIcon="chat"
-          onClick={() => navigate(`/conversaciones?id=${prospect.id}`)}
-        >
-          Chat
-        </Button>
-        <Button
-          variant="secondary"
-          size="sm"
-          className="flex-1"
-          leftIcon="visibility"
-          onClick={() => onProspectClick && onProspectClick(prospect.id)}
-        >
-          Detalles
-        </Button>
-      </div>
     </div>
   )
 }
