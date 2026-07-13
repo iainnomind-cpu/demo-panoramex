@@ -27,7 +27,7 @@ export function useOrgSettings() {
     if (!session) return
 
     const channel = supabase
-      .channel('org_settings_changes')
+      .channel(`org_settings_changes_${Date.now()}`)
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'org_settings' },

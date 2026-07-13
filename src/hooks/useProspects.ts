@@ -27,7 +27,7 @@ export function useProspects() {
 
   useEffect(() => {
     const channel = supabase
-      .channel('prospects-changes')
+      .channel(`prospects-changes-${Date.now()}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'prospects' },
