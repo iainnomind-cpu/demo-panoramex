@@ -7,6 +7,8 @@ import { CHANNEL_CONFIG, Channel, ProspectStatus } from '../../types'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { ReservationModal } from './ReservationModal'
+import { useState } from 'react'
 
 interface Prospect360ModalProps {
   isOpen: boolean
@@ -17,6 +19,7 @@ interface Prospect360ModalProps {
 export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onClose, prospectId }) => {
   const { prospects, conversations, tours, agents } = useAppStore()
   const navigate = useNavigate()
+  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false)
 
   if (!prospectId) return null
 
@@ -98,11 +101,20 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
             <Button variant="primary" leftIcon="chat" onClick={handleOpenChat}>
               Abrir Chat
             </Button>
-            <Button variant="secondary" leftIcon="event_available">
+            <Button variant="secondary" leftIcon="event_available" onClick={() => setIsReservationModalOpen(true)}>
               Reservar
             </Button>
-            <Button variant="outline" leftIcon="call">Llamar</Button>
-            <Button variant="outline" leftIcon="mail">Enviar Email</Button>
+            <Button variant="outline" leftIcon="call" onClick={() => window.open(`tel:${prospect.phone}`)}>
+              Llamar
+            </Button>
+            <Button 
+              variant="outline" 
+              leftIcon="mail" 
+              onClick={() => window.open(`mailto:${prospect.email}`)}
+              disabled={!prospect.email}
+            >
+              Enviar Email
+            </Button>
           </div>
 
           <div className="flex-1 bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
@@ -183,6 +195,14 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
           </div>
         </div>
       </div>
+      
+      <ReservationModal
+        isOpen={isReservationModalOpen}
+        onClose={() => setIsReservationModalOpen(false)}
+        tour={tour}
+        initialName={prospect.name}
+        initialPhone={prospect.phone}
+      />
     </Modal>
   )
 }

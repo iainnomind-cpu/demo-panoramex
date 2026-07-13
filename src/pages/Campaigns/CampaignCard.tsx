@@ -1,5 +1,6 @@
 import { Campaign, CampaignSend } from '../../types'
 import { Button } from '../../components/ui/Button'
+import { useCampaignStore } from '../../store/useCampaignStore'
 
 interface CampaignCardProps {
   campaign: Campaign
@@ -30,6 +31,7 @@ function MetricPill({ label, value, color = 'text-on-surface' }: { label: string
 }
 
 export function CampaignCard({ campaign, sends = [], onClick }: CampaignCardProps) {
+  const { updateCampaignStatus } = useCampaignStore()
   const status = STATUS_MAP[campaign.status] ?? STATUS_MAP.draft
   const typeInfo = TYPE_LABEL[campaign.type]
 
@@ -82,7 +84,13 @@ export function CampaignCard({ campaign, sends = [], onClick }: CampaignCardProp
           Ver Reporte
         </Button>
         {campaign.status === 'draft' && (
-          <Button variant="primary" className="flex-1" onClick={(e) => e.stopPropagation()}>
+          <Button variant="primary" className="flex-1" onClick={(e) => {
+            e.stopPropagation();
+            if (window.confirm('¿Estás seguro de que deseas enviar esta campaña a todos los prospectos segmentados? Esta acción no se puede deshacer.')) {
+              updateCampaignStatus(campaign.id, 'sending' as any);
+              // The backend API /api/campaigns/send-batch would be called here.
+            }
+          }}>
             Enviar
           </Button>
         )}

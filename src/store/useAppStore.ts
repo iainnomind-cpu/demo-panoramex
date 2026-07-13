@@ -34,6 +34,7 @@ interface AppState {
   addMessageToConversation: (conversationId: string, message: Message) => void
   createReservation: (reservation: Reservation) => void
   loadTours: () => Promise<void>
+  loadReservations: () => Promise<void>
   updateVariantPrice: (variantId: string, newPrice: number) => void
   loadSettings: () => Promise<void>
   updateSettings: (status: 'active' | 'paused', accessToken?: string) => Promise<void>
@@ -87,6 +88,17 @@ export const useAppStore = create<AppState>((set, get) => ({
     
     if (!error && data) {
       set({ tours: data as unknown as Tour[] })
+    }
+  },
+
+  loadReservations: async () => {
+    const { data, error } = await supabase
+      .from('reservations')
+      .select('*')
+      .order('created_at', { ascending: false })
+    
+    if (!error && data) {
+      set({ reservations: data as unknown as Reservation[] })
     }
   },
 

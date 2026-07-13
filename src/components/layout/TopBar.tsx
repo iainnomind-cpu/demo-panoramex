@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { useAuthStore } from '../../store/useAuthStore';
 
 const getPageTitle = (pathname: string) => {
   if (pathname === '/') return 'Dashboard';
@@ -9,7 +10,10 @@ const getPageTitle = (pathname: string) => {
 
 export const TopBar: React.FC = () => {
   const location = useLocation();
+  const { agent } = useAuthStore();
   const title = getPageTitle(location.pathname);
+  
+  const initials = agent?.full_name ? agent.full_name.substring(0, 2).toUpperCase() : 'AG';
 
   return (
     <header className="h-[64px] bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm">
@@ -31,21 +35,23 @@ export const TopBar: React.FC = () => {
           />
         </div>
 
-        {/* Notification bell — dot removed until notification panel is implemented */}
+        {/* Notification bell — disabled until notification panel is implemented */}
         <button
           aria-label="Notificaciones"
-          className="relative text-on-surface-variant hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-md"
+          title="Notificaciones próximamente"
+          disabled
+          className="relative text-on-surface-variant transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded-md"
         >
           <span className="material-symbols-outlined">notifications</span>
         </button>
 
         <div className="flex items-center gap-3 border-l border-outline-variant pl-6">
           <div className="flex flex-col items-end hidden sm:flex">
-            <span className="text-sm font-semibold text-on-surface">Cianya López</span>
-            <span className="text-xs text-on-surface-variant">Asesor</span>
+            <span className="text-sm font-semibold text-on-surface">{agent?.full_name || 'Agente'}</span>
+            <span className="text-xs text-on-surface-variant capitalize">{agent?.role || 'user'}</span>
           </div>
-          <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-bold shadow-sm">
-            CL
+          <div className="h-10 w-10 rounded-full flex items-center justify-center text-white font-bold shadow-sm" style={{ backgroundColor: agent?.color || '#3b82f6' }}>
+            {initials}
           </div>
         </div>
       </div>

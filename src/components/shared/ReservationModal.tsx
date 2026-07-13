@@ -3,32 +3,75 @@ import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { useToast } from '../../hooks/useToast';
-import { Tour } from '../../types';
+import { Tour, Reservation } from '../../types';
+import { supabase } from '../../lib/supabase';
+import { useAppStore } from '../../store/useAppStore';
 
 interface ReservationModalProps {
   isOpen: boolean;
   onClose: () => void;
   tour?: Tour | null;
+  initialName?: string;
+  initialPhone?: string;
 }
 
-export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onClose, tour }) => {
+export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onClose, tour, initialName = '', initialPhone = '' }) => {
   const { addToast } = useToast();
+  const { loadReservations } = useAppStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    name: initialName,
+    phone: initialPhone,
+    email: '',
+    date: '',
+    num_people: '2',
+    notes: ''
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Update initial values if they arrive later via props
+  React.useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      name: initialName || prev.name,
+      phone: initialPhone || prev.phone
+    }));
+  }, [initialName, initialPhone]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const { error } = await supabase.from('reservations').insert([{
+        prospect_id: null, // Depending on if we have a prospect
+        tour_id: tour?.id || 't1', // fallback
+        date: formData.date,
+        num_people: parseInt(formData.num_people, 10),
+        status: 'confirmed',
+        total_price: tour ? (tour.base_price || 0) * parseInt(formData.num_people, 10) : 0,
+        created_at: new Date().toISOString()
+      }]);
+
+      if (error) throw error;
+
+      await loadReservations();
+      
       addToast({
         type: 'success',
         title: 'Reserva creada',
         message: 'La reserva ha sido registrada en el sistema.'
       });
       onClose();
-    }, 1000);
+    } catch (err: any) {
+      addToast({
+        type: 'error',
+        title: 'Error al crear reserva',
+        message: err.message
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -63,6 +106,8 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onCl
               label="Nombre Completo" 
               placeholder="Ej. Juan Pérez" 
               leftIcon="person"
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
               required
             />
             <Input 
@@ -70,6 +115,8 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onCl
               placeholder="Ej. 33 1234 5678" 
               leftIcon="phone"
               type="tel"
+              value={formData.phone}
+              onChange={(e) => setFormData({...formData, phone: e.target.value})}
               required
             />
             <div className="md:col-span-2">
@@ -78,6 +125,8 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onCl
                 placeholder="ejemplo@correo.com" 
                 leftIcon="mail"
                 type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
               />
             </div>
           </div>
@@ -102,14 +151,17 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onCl
               label="Fecha del Tour" 
               type="date"
               leftIcon="calendar_today"
+              value={formData.date}
+              onChange={(e) => setFormData({...formData, date: e.target.value})}
               required
             />
             <Input 
               label="Número de Personas" 
               type="number"
               min="1"
-              defaultValue="2"
               leftIcon="group"
+              value={formData.num_people}
+              onChange={(e) => setFormData({...formData, num_people: e.target.value})}
               required
             />
           </div>
@@ -124,6 +176,8 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onCl
           <textarea
             className="w-full rounded-md border border-outline-variant bg-surface py-2 px-3 text-sm placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary resize-none h-24"
             placeholder="Alergias, requerimientos especiales, etc."
+            value={formData.notes}
+            onChange={(e) => setFormData({...formData, notes: e.target.value})}
           ></textarea>
         </div>
 

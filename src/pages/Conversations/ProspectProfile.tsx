@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppStore } from '../../store/useAppStore';
+import { Prospect360Modal } from '../../components/shared/Prospect360Modal';
+import { ReservationModal } from '../../components/shared/ReservationModal';
 import { CHANNEL_CONFIG, STATUS_CONFIG, TOUR_CATEGORY_CONFIG, Channel, ProspectStatus, TourCategory } from '../../types';
 
 interface ProspectProfileProps {
@@ -8,6 +10,8 @@ interface ProspectProfileProps {
 
 const ProspectProfile: React.FC<ProspectProfileProps> = ({ conversationId }) => {
   const { conversations, prospects, tours } = useAppStore();
+  const [is360Open, setIs360Open] = useState(false);
+  const [isReservationOpen, setIsReservationOpen] = useState(false);
 
   if (!conversationId) {
     return (
@@ -116,15 +120,35 @@ const ProspectProfile: React.FC<ProspectProfileProps> = ({ conversationId }) => 
 
       {/* Actions */}
       <div className="p-5 border-t border-gray-200 space-y-3 bg-gray-50">
-        <button className="w-full bg-blue-600 text-white font-semibold py-2.5 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-sm">
+        <button 
+          onClick={() => setIsReservationOpen(true)}
+          className="w-full bg-blue-600 text-white font-semibold py-2.5 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-sm"
+        >
           <span className="material-symbols-outlined text-[20px]">add_task</span>
           Convertir a Reserva
         </button>
-        <button className="w-full bg-white text-gray-700 font-semibold py-2.5 px-4 rounded-lg hover:bg-gray-50 transition-colors border border-gray-300 flex items-center justify-center gap-2 shadow-sm">
+        <button 
+          onClick={() => setIs360Open(true)}
+          className="w-full bg-white text-gray-700 font-semibold py-2.5 px-4 rounded-lg hover:bg-gray-50 transition-colors border border-gray-300 flex items-center justify-center gap-2 shadow-sm"
+        >
           <span className="material-symbols-outlined text-[20px]">person</span>
           Ver Perfil Completo
         </button>
       </div>
+
+      <Prospect360Modal 
+        isOpen={is360Open}
+        onClose={() => setIs360Open(false)}
+        prospectId={prospect.id}
+      />
+
+      <ReservationModal
+        isOpen={isReservationOpen}
+        onClose={() => setIsReservationOpen(false)}
+        tour={tour}
+        initialName={prospect.name}
+        initialPhone={prospect.phone}
+      />
     </div>
   );
 };
