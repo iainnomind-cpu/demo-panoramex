@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../../store/useAppStore';
+import { useToast } from '../../hooks/useToast';
 import { TourCategory, Tour } from '../../types';
 import { CategoryFilter } from './CategoryFilter';
 import { TourCard } from './TourCard';
 import { TourDetailModal } from './TourDetailModal';
 import { ReservationModal } from '../../components/shared/ReservationModal';
+import { NuevoTourModal } from './NuevoTourModal';
 import { Button } from '../../components/ui/Button';
 
 export const Tours: React.FC = () => {
   const tours = useAppStore((state) => state.tours);
   const [selectedCategory, setSelectedCategory] = useState<TourCategory | 'todos'>('todos');
+  const { addToast } = useToast();
   
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [reservationModalOpen, setReservationModalOpen] = useState(false);
+  const [nuevoTourOpen, setNuevoTourOpen] = useState(false);
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
 
   const filteredTours = selectedCategory === 'todos' 
@@ -37,7 +41,13 @@ export const Tours: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Catálogo de Tours</h1>
           <p className="text-sm text-gray-500 mt-1">Explora y gestiona los tours disponibles</p>
         </div>
-        <Button variant="primary" leftIcon="add">Nuevo Tour</Button>
+        <Button 
+          variant="primary" 
+          leftIcon="add"
+          onClick={() => setNuevoTourOpen(true)}
+        >
+          Nuevo Tour
+        </Button>
       </div>
 
       {/* Filter */}
@@ -81,6 +91,10 @@ export const Tours: React.FC = () => {
         isOpen={reservationModalOpen}
         onClose={() => setReservationModalOpen(false)}
         tour={selectedTour}
+      />
+      <NuevoTourModal
+        isOpen={nuevoTourOpen}
+        onClose={() => setNuevoTourOpen(false)}
       />
     </div>
   );
