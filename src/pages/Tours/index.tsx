@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import { useToast } from '../../hooks/useToast';
 import { TourCategory, Tour } from '../../types';
@@ -11,6 +11,7 @@ import { Button } from '../../components/ui/Button';
 
 export const Tours: React.FC = () => {
   const tours = useAppStore((state) => state.tours);
+  const loadTours = useAppStore((state) => state.loadTours);
   const [selectedCategory, setSelectedCategory] = useState<TourCategory | 'todos'>('todos');
   const { addToast } = useToast();
   
@@ -18,6 +19,10 @@ export const Tours: React.FC = () => {
   const [reservationModalOpen, setReservationModalOpen] = useState(false);
   const [nuevoTourOpen, setNuevoTourOpen] = useState(false);
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
+
+  useEffect(() => {
+    loadTours();
+  }, [loadTours]);
 
   const filteredTours = selectedCategory === 'todos' 
     ? tours 
