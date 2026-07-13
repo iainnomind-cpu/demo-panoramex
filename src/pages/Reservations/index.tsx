@@ -5,7 +5,6 @@ import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { useEffect } from 'react'
 import { ReservationModal } from '../../components/shared/ReservationModal'
-import { exportToCSV } from '../../lib/exportData'
 
 export function Reservations() {
   const { reservations, loadReservations } = useAppStore()
@@ -26,7 +25,7 @@ export function Reservations() {
     if (filteredReservations.length === 0) return
     const csvContent = [
       ['ID', 'Estado', 'Pax', 'Total'],
-      ...filteredReservations.map(r => [r.id, r.status, r.num_people, r.total_price])
+      ...filteredReservations.map(r => [r.id, r.status, r.num_people, r.total_amount])
     ].map(row => row.join(',')).join('\n')
     
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { useAuthStore } from '../../store/useAuthStore';
+import { useAuthStore } from '../../store/authStore';
 
 const getPageTitle = (pathname: string) => {
   if (pathname === '/') return 'Dashboard';
@@ -50,7 +50,7 @@ export const TopBar: React.FC = () => {
             <span className="text-sm font-semibold text-on-surface">{agent?.full_name || 'Agente'}</span>
             <span className="text-xs text-on-surface-variant capitalize">{agent?.role || 'user'}</span>
           </div>
-          <div className="h-10 w-10 rounded-full flex items-center justify-center text-white font-bold shadow-sm" style={{ backgroundColor: agent?.color || '#3b82f6' }}>
+          <div className="h-10 w-10 rounded-full flex items-center justify-center text-white font-bold shadow-sm bg-blue-500">
             {initials}
           </div>
         </div>

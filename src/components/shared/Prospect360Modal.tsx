@@ -110,8 +110,7 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
             <Button 
               variant="outline" 
               leftIcon="mail" 
-              onClick={() => window.open(`mailto:${prospect.email}`)}
-              disabled={!prospect.email}
+              onClick={() => window.open(`mailto:`)}
             >
               Enviar Email
             </Button>
@@ -202,6 +201,7 @@ export const Prospect360Modal: React.FC<Prospect360ModalProps> = ({ isOpen, onCl
         tour={tour}
         initialName={prospect.name}
         initialPhone={prospect.phone}
+        prospectId={prospect.id}
       />
     </Modal>
   )

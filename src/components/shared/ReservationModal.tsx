@@ -6,6 +6,7 @@ import { useToast } from '../../hooks/useToast';
 import { Tour, Reservation } from '../../types';
 import { supabase } from '../../lib/supabase';
 import { useAppStore } from '../../store/useAppStore';
+import { useAuthStore } from '../../store/authStore';
 
 interface ReservationModalProps {
   isOpen: boolean;
@@ -13,11 +14,13 @@ interface ReservationModalProps {
   tour?: Tour | null;
   initialName?: string;
   initialPhone?: string;
+  prospectId?: string;
 }
 
-export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onClose, tour, initialName = '', initialPhone = '' }) => {
+export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onClose, tour, initialName = '', initialPhone = '', prospectId }) => {
   const { addToast } = useToast();
   const { loadReservations } = useAppStore();
+  const { agent } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
@@ -44,12 +47,14 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onCl
     
     try {
       const { error } = await supabase.from('reservations').insert([{
-        prospect_id: null, // Depending on if we have a prospect
-        tour_id: tour?.id || 't1', // fallback
-        date: formData.date,
+        prospect_id: prospectId || 'p1', // fallback needed if no prospect is passed
+        tour_variant_id: tour?.tour_variants?.[0]?.id || 'v1',
+        service_date: formData.date,
         num_people: parseInt(formData.num_people, 10),
         status: 'confirmed',
-        total_price: tour ? (tour.base_price || 0) * parseInt(formData.num_people, 10) : 0,
+        total_amount: tour?.tour_variants?.[0]?.price_per_person ? (tour.tour_variants[0].price_per_person) * parseInt(formData.num_people, 10) : 0,
+        deposit_amount: 0,
+        created_by: agent?.id || 'a1',
         created_at: new Date().toISOString()
       }]);
 
